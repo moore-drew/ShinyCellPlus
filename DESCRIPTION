@@ -1,4 +1,4 @@
-Package: ShinyCell_DEV
+Package: ShinyCellDEV
 Type: Package
 Title: Shiny Interactive Web Apps for Single-Cell Data
 Version: 2.1.0

@@ -98,7 +98,7 @@ createConfig <- function(obj, meta.to.include = NA, legendCols = 4,
   scConf = data.table()
   for(iMeta in meta.to.include){
     tmpConf = data.table(ID = iMeta, UI = iMeta, fID = NA, fUI = NA, 
-                         fCL = NA, fRow = NA, default = 0, grp = FALSE)
+                         fCL = NA, fRow = NA, default = 0, grp = FALSE, split = FALSE)
     
     # Convert to factors if metadata contains characters
     if(is.character(objMeta[[iMeta]])){
@@ -115,6 +115,9 @@ createConfig <- function(obj, meta.to.include = NA, legendCols = 4,
                              collapse = "|")
         tmpConf$fRow = ceiling(nLevels / legendCols)
         tmpConf$grp = TRUE
+      } else if(nLevels == 2){
+        tmpConf$split = TRUE
+      }
       } else if(nLevels == 1){
         tmpConf$fID = levels(objMeta[[iMeta]])
         tmpConf$fUI = tmpConf$fID
