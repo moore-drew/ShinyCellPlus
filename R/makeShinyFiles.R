@@ -228,7 +228,7 @@ makeShinyFiles <- function(
       # Update sc1conf accordingly
       tmp = data.table(ID = colnames(drMat), UI = colnames(drMat),
                        fID = NA, fUI = NA, fCL = NA, fRow = NA, 
-                       default = 0, grp = FALSE, dimred = TRUE)
+                       default = 0, grp = FALSE, split = FALSE, dimred = TRUE)
       tmp$UI = gsub("_", "", tmp$UI)
       sc1conf = rbindlist(list(sc1conf, tmp))
     }
@@ -248,7 +248,7 @@ makeShinyFiles <- function(
       # Update sc1conf accordingly
       tmp = data.table(ID = colnames(drMat), UI = colnames(drMat),
                        fID = NA, fUI = NA, fCL = NA, fRow = NA, 
-                       default = 0, grp = FALSE, dimred = TRUE)
+                       default = 0, grp = FALSE, dimred = TRUE, split= FALSE)
       tmp$UI = gsub("_", "", tmp$UI)
       sc1conf = rbindlist(list(sc1conf, tmp))
     }
@@ -267,7 +267,7 @@ makeShinyFiles <- function(
       # Update sc1conf accordingly
       tmp = data.table(ID = colnames(drMat), UI = colnames(drMat),
                        fID = NA, fUI = NA, fCL = NA, fRow = NA, 
-                       default = 0, grp = FALSE, dimred = TRUE)
+                       default = 0, grp = FALSE, dimred = TRUE, split = FALSE)
       tmp$UI = gsub("_", "", tmp$UI)
       sc1conf = rbindlist(list(sc1conf, tmp))
     }
@@ -286,7 +286,7 @@ makeShinyFiles <- function(
       # Update sc1conf accordingly
       tmp = data.table(ID = colnames(drMat), UI = colnames(drMat),
                        fID = NA, fUI = NA, fCL = NA, fRow = NA, 
-                       default = 0, grp = FALSE, dimred = TRUE)
+                       default = 0, grp = FALSE, dimred = TRUE, split = FALSE)
       tmp$UI = gsub("_", "", tmp$UI)
       sc1conf = rbindlist(list(sc1conf, tmp))
     }

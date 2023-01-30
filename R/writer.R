@@ -88,13 +88,22 @@ wrSVfix <- function() {
              '### Common plotting functions \n',
              '# Plot cell information on dimred \n',
              'scDRcell <- function(inpConf, inpMeta, inpdrX, inpdrY, inp1, inpsub1, inpsub2, \n',
-             '                     inpsiz, inpcol, inpord, inpfsz, inpasp, inptxt, inplab){{ \n',
+             '                     inpsiz, inpcol, inpord, inpfsz, inpasp, inptxt, inplab, insplit = NULL, split_idx = NULL){{ \n',
              '  if(is.null(inpsub1)){{inpsub1 = inpConf$UI[1]}} \n',
              '  # Prepare ggData \n',
-             '  ggData = inpMeta[, c(inpConf[UI == inpdrX]$ID, inpConf[UI == inpdrY]$ID, \n',
+             '  if (!(is.null(insplit))) {{ \n'
+             '    ggData = inpMeta[, c(inpConf[UI == inpdrX]$ID, inpConf[UI == inpdrY]$ID, \n'
+             '                          inpConf[UI == inp1]$ID, inpConf[UI == inpsub1]$ID, \n'
+             '                          inpConf[UI == insplit]$ID), with = FALSE] \n'
+             '    colnames(ggData) = c("X", "Y", "val", "sub", "split") \n'
+             '    split_options = as.character(unique(inpMeta[[insplit]])) \n'
+             '    ggData = ggData[ggData$split==split_options[split_idx]] \n'
+             '}} else {{ \n'
+             '    ggData = inpMeta[, c(inpConf[UI == inpdrX]$ID, inpConf[UI == inpdrY]$ID, \n',
              '                       inpConf[UI == inp1]$ID, inpConf[UI == inpsub1]$ID),  \n',
-             '                   with = FALSE] \n',
-             '  colnames(ggData) = c("X", "Y", "val", "sub") \n',
+             '                        with = FALSE] \n',
+             '    colnames(ggData) = c("X", "Y", "val", "sub") \n',
+             '}} \n'
              '  rat = (max(ggData$X) - min(ggData$X)) / (max(ggData$Y) - min(ggData$Y)) \n',
              '  bgCells = FALSE \n',
              '  if(length(inpsub2) != 0 & length(inpsub2) != nlevels(ggData$sub)){{ \n',
@@ -153,6 +162,9 @@ wrSVfix <- function() {
              '  }} else if(inpasp == "Fixed") {{ \n',
              '    ggOut = ggOut + coord_fixed() \n',
              '  }} \n',
+             '  if (!(is.null(insplit))){{ \n'
+             '    ggOut = ggOut + ggtitle(split_options[split_idx]) + theme(plot.title = element_text(hjust=0.5)) \n'
+             '  }} \n'
              '  return(ggOut) \n',
              '}} \n',
              ' \n',
@@ -765,6 +777,91 @@ wrSVmain <- function(prefix, subst = "") {
              '  }}) \n',
              '   \n',
              '   \n',
+             '### Plots for tab a1 SPLIT CELLS \n'
+              'output$sc1a1bsub1.ui <- renderUI({{ \n'
+              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n'
+              'checkboxGroupInput("sc1a1bsub2", "Select which cells to show", inline = TRUE, \n'
+              'choices = sub, selected = sub) \n'
+              '}}) \n'
+              'observeEvent(input$sc1a1bsub1non, {{ \n'
+              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n'
+              'updateCheckboxGroupInput(session, inputId = "sc1a1bsub2", label = "Select which cells to show", \n'
+              'choices = sub, selected = NULL, inline = TRUE) \n'
+              '}}) \n'
+              'observeEvent(input$sc1a1bsub1all, {{ \n'
+              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n'
+              'updateCheckboxGroupInput(session, inputId = "sc1a1bsub2", label = "Select which cells to show", \n'
+              'choices = sub, selected = sub, inline = TRUE) \n'
+              '}}) \n'
+              'output$sc1a1boup1 <- renderPlot({{ \n'
+              'scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1, insplit=input$sc1basplit1, split_idx=1) \n'
+              '}}) \n'
+              'output$sc1a1boup1.ui <- renderUI({{ \n'
+              'plotOutput("sc1a1boup1", height = pList[input$sc1a1bpsz]) \n'
+              '}}) \n'
+              'output$sc1a1oup1.pdf <- downloadHandler( \n'
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
+              'input$sc1a1binp1,".pdf") }}, \n'
+              'content = function(file) {{ ggsave( \n'
+              'file, device = "pdf", height = input$sc1a1boup1.h, width = input$sc1a1boup1.w, useDingbats = FALSE, \n'
+              'plot = scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1) ) \n'
+              '}}) \n'
+              'output$sc1a1oup1.png <- downloadHandler( \n'
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
+              'input$sc1a1binp1,".png") }}, \n'
+              'content = function(file) {{ ggsave( \n'
+              'file, device = "png", height = input$sc1a1boup1.h, width = input$sc1a1boup1.w, \n'
+              'plot = scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
+              'input$sc1a1bbsub1, input$sc1a1bsub2, \n'
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1) ) \n'
+              '}}) \n'
+              'output$sc1a1b.dt <- renderDataTable({{ \n'
+              'ggData = scDRnum(sc1conf, sc1meta, input$sc1a1binp1, input$sc1a1binp2, \n'
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
+              '"sc1gexpr.h5", sc1gene, input$sc1a1bsplt) \n'
+              'datatable(ggData, rownames = FALSE, extensions = "Buttons", \n'
+              'options = list(pageLength = -1, dom = "tB", buttons = c("copy", "csv", "excel"))) %>% \n'
+              'formatRound(columns = c("pctExpress"), digits = 2) \n'
+              '}}) \n'
+              ' \n'
+              'output$sc1a1boup2 <- renderPlot({{ \n'
+              'scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1, insplit=input$sc1basplit1, split_idx=2) \n'
+              '}}) \n'
+              'output$sc1a1boup2.ui <- renderUI({{ \n'
+              'plotOutput("sc1a1boup2", height = pList[input$sc1a1bpsz]) \n'
+              '}}) \n'
+              'output$sc1a1boup2.pdf <- downloadHandler( \n'
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
+              'input$sc1a1binp2,".pdf") }}, \n'
+              'content = function(file) {{ ggsave( \n'
+              'file, device = "pdf", height = input$sc1a1boup2.h, width = input$sc1a1boup2.w, useDingbats = FALSE, \n'
+              'plot = scDRgene(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp2, \n'
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
+              '"sc1gexpr.h5", sc1gene, \n'
+              'input$sc1a1bsiz, input$sc1a1bcol2, input$sc1a1bord2, \n'
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt) ) \n'
+              '}}) \n'
+              'output$sc1a1boup2.png <- downloadHandler( \n'
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
+              'input$sc1a1binp2,".png") }}, \n'
+              'content = function(file) {{ ggsave( \n'
+              'file, device = "png", height = input$sc1a1boup2.h, width = input$sc1a1boup2.w, \n'
+              'plot = scDRgene(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp2, \n'
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
+              '"sc1gexpr.h5", sc1gene, \n'
+              'input$sc1a1bsiz, input$sc1a1bcol2, input$sc1a1bord2, \n'
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt) ) \n'
+              '}}) \n'
              '  ### Plots for tab a2 \n',
              '{subst}  output${prefix}a2sub1.ui <- renderUI({{ \n',
              '{subst}    sub = strsplit({prefix}conf[UI == input${prefix}a2sub1]$fID, "\\\\|")[[1]] \n',

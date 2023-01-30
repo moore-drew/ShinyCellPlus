@@ -115,9 +115,9 @@ createConfig <- function(obj, meta.to.include = NA, legendCols = 4,
                              collapse = "|")
         tmpConf$fRow = ceiling(nLevels / legendCols)
         tmpConf$grp = TRUE
-      } else if(nLevels == 2){
-        tmpConf$split = TRUE
-      }
+        if(nLevels == 2) {
+          tmpConf$split = TRUE
+        }
       } else if(nLevels == 1){
         tmpConf$fID = levels(objMeta[[iMeta]])
         tmpConf$fUI = tmpConf$fID
