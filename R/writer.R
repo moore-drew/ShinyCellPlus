@@ -91,14 +91,14 @@ wrSVfix <- function() {
              '                     inpsiz, inpcol, inpord, inpfsz, inpasp, inptxt, inplab, insplit = NULL, split_idx = NULL){{ \n',
              '  if(is.null(inpsub1)){{inpsub1 = inpConf$UI[1]}} \n',
              '  # Prepare ggData \n',
-             '  if (!(is.null(insplit))) {{ \n'
-             '    ggData = inpMeta[, c(inpConf[UI == inpdrX]$ID, inpConf[UI == inpdrY]$ID, \n'
-             '                          inpConf[UI == inp1]$ID, inpConf[UI == inpsub1]$ID, \n'
-             '                          inpConf[UI == insplit]$ID), with = FALSE] \n'
-             '    colnames(ggData) = c("X", "Y", "val", "sub", "split") \n'
-             '    split_options = as.character(unique(inpMeta[[insplit]])) \n'
-             '    ggData = ggData[ggData$split==split_options[split_idx]] \n'
-             '}} else {{ \n'
+             '  if (!(is.null(insplit))) {{ \n',
+             '    ggData = inpMeta[, c(inpConf[UI == inpdrX]$ID, inpConf[UI == inpdrY]$ID, \n',
+             '                          inpConf[UI == inp1]$ID, inpConf[UI == inpsub1]$ID, \n',
+             '                          inpConf[UI == insplit]$ID), with = FALSE] \n',
+             '    colnames(ggData) = c("X", "Y", "val", "sub", "split") \n',
+             '    split_options = as.character(unique(inpMeta[[insplit]])) \n',
+             '    ggData = ggData[ggData$split==split_options[split_idx]] \n',
+             '}} else {{ \n',
              '    ggData = inpMeta[, c(inpConf[UI == inpdrX]$ID, inpConf[UI == inpdrY]$ID, \n',
              '                       inpConf[UI == inp1]$ID, inpConf[UI == inpsub1]$ID),  \n',
              '                        with = FALSE] \n',
@@ -777,91 +777,91 @@ wrSVmain <- function(prefix, subst = "") {
              '  }}) \n',
              '   \n',
              '   \n',
-             '### Plots for tab a1 SPLIT CELLS \n'
-              'output$sc1a1bsub1.ui <- renderUI({{ \n'
-              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n'
-              'checkboxGroupInput("sc1a1bsub2", "Select which cells to show", inline = TRUE, \n'
-              'choices = sub, selected = sub) \n'
-              '}}) \n'
-              'observeEvent(input$sc1a1bsub1non, {{ \n'
-              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n'
-              'updateCheckboxGroupInput(session, inputId = "sc1a1bsub2", label = "Select which cells to show", \n'
-              'choices = sub, selected = NULL, inline = TRUE) \n'
-              '}}) \n'
-              'observeEvent(input$sc1a1bsub1all, {{ \n'
-              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n'
-              'updateCheckboxGroupInput(session, inputId = "sc1a1bsub2", label = "Select which cells to show", \n'
-              'choices = sub, selected = sub, inline = TRUE) \n'
-              '}}) \n'
-              'output$sc1a1boup1 <- renderPlot({{ \n'
-              'scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
-              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
-              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
-              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1, insplit=input$sc1basplit1, split_idx=1) \n'
-              '}}) \n'
-              'output$sc1a1boup1.ui <- renderUI({{ \n'
-              'plotOutput("sc1a1boup1", height = pList[input$sc1a1bpsz]) \n'
-              '}}) \n'
-              'output$sc1a1oup1.pdf <- downloadHandler( \n'
-              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
-              'input$sc1a1binp1,".pdf") }}, \n'
-              'content = function(file) {{ ggsave( \n'
-              'file, device = "pdf", height = input$sc1a1boup1.h, width = input$sc1a1boup1.w, useDingbats = FALSE, \n'
-              'plot = scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
-              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
-              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
-              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1) ) \n'
-              '}}) \n'
-              'output$sc1a1oup1.png <- downloadHandler( \n'
-              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
-              'input$sc1a1binp1,".png") }}, \n'
-              'content = function(file) {{ ggsave( \n'
-              'file, device = "png", height = input$sc1a1boup1.h, width = input$sc1a1boup1.w, \n'
-              'plot = scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
-              'input$sc1a1bbsub1, input$sc1a1bsub2, \n'
-              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
-              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1) ) \n'
-              '}}) \n'
-              'output$sc1a1b.dt <- renderDataTable({{ \n'
-              'ggData = scDRnum(sc1conf, sc1meta, input$sc1a1binp1, input$sc1a1binp2, \n'
-              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
-              '"sc1gexpr.h5", sc1gene, input$sc1a1bsplt) \n'
-              'datatable(ggData, rownames = FALSE, extensions = "Buttons", \n'
-              'options = list(pageLength = -1, dom = "tB", buttons = c("copy", "csv", "excel"))) %>% \n'
-              'formatRound(columns = c("pctExpress"), digits = 2) \n'
-              '}}) \n'
-              ' \n'
-              'output$sc1a1boup2 <- renderPlot({{ \n'
-              'scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n'
-              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
-              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n'
-              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1, insplit=input$sc1basplit1, split_idx=2) \n'
-              '}}) \n'
-              'output$sc1a1boup2.ui <- renderUI({{ \n'
-              'plotOutput("sc1a1boup2", height = pList[input$sc1a1bpsz]) \n'
-              '}}) \n'
-              'output$sc1a1boup2.pdf <- downloadHandler( \n'
-              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
-              'input$sc1a1binp2,".pdf") }}, \n'
-              'content = function(file) {{ ggsave( \n'
-              'file, device = "pdf", height = input$sc1a1boup2.h, width = input$sc1a1boup2.w, useDingbats = FALSE, \n'
-              'plot = scDRgene(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp2, \n'
-              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
-              '"sc1gexpr.h5", sc1gene, \n'
-              'input$sc1a1bsiz, input$sc1a1bcol2, input$sc1a1bord2, \n'
-              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt) ) \n'
-              '}}) \n'
-              'output$sc1a1boup2.png <- downloadHandler( \n'
-              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n'
-              'input$sc1a1binp2,".png") }}, \n'
-              'content = function(file) {{ ggsave( \n'
-              'file, device = "png", height = input$sc1a1boup2.h, width = input$sc1a1boup2.w, \n'
-              'plot = scDRgene(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp2, \n'
-              'input$sc1a1bsub1, input$sc1a1bsub2, \n'
-              '"sc1gexpr.h5", sc1gene, \n'
-              'input$sc1a1bsiz, input$sc1a1bcol2, input$sc1a1bord2, \n'
-              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt) ) \n'
-              '}}) \n'
+             '### Plots for tab a1 SPLIT CELLS \n',
+              'output$sc1a1bsub1.ui <- renderUI({{ \n',
+              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n',
+              'checkboxGroupInput("sc1a1bsub2", "Select which cells to show", inline = TRUE, \n',
+              'choices = sub, selected = sub) \n',
+              '}}) \n',
+              'observeEvent(input$sc1a1bsub1non, {{ \n',
+              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n',
+              'updateCheckboxGroupInput(session, inputId = "sc1a1bsub2", label = "Select which cells to show", \n',
+              'choices = sub, selected = NULL, inline = TRUE) \n',
+              '}}) \n',
+              'observeEvent(input$sc1a1bsub1all, {{ \n',
+              'sub = strsplit(sc1conf[UI == input$sc1a1bsub1]$fID, "\\|")[[1]] \n',
+              'updateCheckboxGroupInput(session, inputId = "sc1a1bsub2", label = "Select which cells to show", \n',
+              'choices = sub, selected = sub, inline = TRUE) \n',
+              '}}) \n',
+              'output$sc1a1boup1 <- renderPlot({{ \n',
+              'scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n',
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n',
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n',
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1, insplit=input$sc1basplit1, split_idx=1) \n',
+              '}}) \n',
+              'output$sc1a1boup1.ui <- renderUI({{ \n',
+              'plotOutput("sc1a1boup1", height = pList[input$sc1a1bpsz]) \n',
+              '}}) \n',
+              'output$sc1a1oup1.pdf <- downloadHandler( \n',
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n',
+              'input$sc1a1binp1,".pdf") }}, \n',
+              'content = function(file) {{ ggsave( \n',
+              'file, device = "pdf", height = input$sc1a1boup1.h, width = input$sc1a1boup1.w, useDingbats = FALSE, \n',
+              'plot = scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n',
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n',
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n',
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1) ) \n',
+              '}}) \n',
+              'output$sc1a1oup1.png <- downloadHandler( \n',
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n',
+              'input$sc1a1binp1,".png") }}, \n',
+              'content = function(file) {{ ggsave( \n',
+              'file, device = "png", height = input$sc1a1boup1.h, width = input$sc1a1boup1.w, \n',
+              'plot = scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n',
+              'input$sc1a1bbsub1, input$sc1a1bsub2, \n',
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n',
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1) ) \n',
+              '}}) \n',
+              'output$sc1a1b.dt <- renderDataTable({{ \n',
+              'ggData = scDRnum(sc1conf, sc1meta, input$sc1a1binp1, input$sc1a1binp2, \n',
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n',
+              '"sc1gexpr.h5", sc1gene, input$sc1a1bsplt) \n',
+              'datatable(ggData, rownames = FALSE, extensions = "Buttons", \n',
+              'options = list(pageLength = -1, dom = "tB", buttons = c("copy", "csv", "excel"))) %>% \n',
+              'formatRound(columns = c("pctExpress"), digits = 2) \n',
+              '}}) \n',
+              ' \n',
+              'output$sc1a1boup2 <- renderPlot({{ \n',
+              'scDRcell(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp1, \n',
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n',
+              'input$sc1a1bsiz, input$sc1a1bcol1, input$sc1a1bord1, \n',
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt, input$sc1a1blab1, insplit=input$sc1basplit1, split_idx=2) \n',
+              '}}) \n',
+              'output$sc1a1boup2.ui <- renderUI({{ \n',
+              'plotOutput("sc1a1boup2", height = pList[input$sc1a1bpsz]) \n',
+              '}}) \n',
+              'output$sc1a1boup2.pdf <- downloadHandler( \n',
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n',
+              'input$sc1a1binp2,".pdf") }}, \n',
+              'content = function(file) {{ ggsave( \n',
+              'file, device = "pdf", height = input$sc1a1boup2.h, width = input$sc1a1boup2.w, useDingbats = FALSE, \n',
+              'plot = scDRgene(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp2, \n',
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n',
+              '"sc1gexpr.h5", sc1gene, \n',
+              'input$sc1a1bsiz, input$sc1a1bcol2, input$sc1a1bord2, \n',
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt) ) \n',
+              '}}) \n',
+              'output$sc1a1boup2.png <- downloadHandler( \n',
+              'filename = function() {{ paste0("sc1",input$sc1a1bdrX,"_",input$sc1a1bdrY,"_", \n',
+              'input$sc1a1binp2,".png") }}, \n',
+              'content = function(file) {{ ggsave( \n',
+              'file, device = "png", height = input$sc1a1boup2.h, width = input$sc1a1boup2.w, \n',
+              'plot = scDRgene(sc1conf, sc1meta, input$sc1a1bdrX, input$sc1a1bdrY, input$sc1a1binp2, \n',
+              'input$sc1a1bsub1, input$sc1a1bsub2, \n',
+              '"sc1gexpr.h5", sc1gene, \n',
+              'input$sc1a1bsiz, input$sc1a1bcol2, input$sc1a1bord2, \n',
+              'input$sc1a1bfsz, input$sc1a1basp, input$sc1a1btxt) ) \n',
+              '}}) \n',
              '  ### Plots for tab a2 \n',
              '{subst}  output${prefix}a2sub1.ui <- renderUI({{ \n',
              '{subst}    sub = strsplit({prefix}conf[UI == input${prefix}a2sub1]$fID, "\\\\|")[[1]] \n',
@@ -1459,185 +1459,185 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '    )    # End of fluidRow (4 space) \n',
              '  ),     # End of tab (2 space) \n',
              ' \n',
-             '### Tab1.a1b: SPLIT CELL INFO \n'
-              'tabPanel( \n'
-              'HTML("SPLIT CELL INFO"), \n'
-              'h4("Cell information vs gene expression on reduced dimensions"), \n'
-              '"In this tab, users can visualise both cell information and gene ", \n'
-              '"expression side-by-side on low-dimensional representions.", \n'
-              'br(),br(), \n'
-              'fluidRow( \n'
-              'column( \n'
-              '3, h4("Dimension Reduction"), \n'
-              'fluidRow( \n'
-              'column( \n'
-              '12, selectInput("sc1a1bdrX", "X-axis:", choices = sc1conf[dimred == TRUE]$UI, \n'
-              'selected = sc1def$dimred[1]), \n'
-              'selectInput("sc1a1bdrY", "Y-axis:", choices = sc1conf[dimred == TRUE]$UI, \n'
-              'selected = sc1def$dimred[2])) \n'
-              ') \n'
-              '), # End of column (6 space) \n'
-              'column( \n'
-              '3, actionButton("sc1a1btogL", "Toggle to subset cells"), \n'
-              'conditionalPanel( \n'
-              'condition = "input.sc1a1btogL % 2 == 1", \n'
-              'selectInput("sc1a1bsub1", "Cell information to subset:", \n'
-              'choices = sc1conf[grp == TRUE]$UI, \n'
-              'selected = sc1def$grp1), \n'
-              'uiOutput("sc1a1bsub1.ui"), \n'
-              'actionButton("sc1a1bsub1all", "Select all groups", class = "btn btn-primary"), \n'
-              'actionButton("sc1a1bsub1non", "Deselect all groups", class = "btn btn-primary") \n'
-              ') \n'
-              '), # End of column (6 space) \n'
-              'column( \n'
-              '6, actionButton("sc1a1btog0", "Toggle graphics controls"), \n'
-              'conditionalPanel( \n'
-              'condition = "input.sc1a1btog0 % 2 == 1", \n'
-              'fluidRow( \n'
-              'column( \n'
-              '6, sliderInput("sc1a1bsiz", "Point size:", \n'
-              'min = 0, max = 4, value = 1.25, step = 0.25), \n'
-              'radioButtons("sc1a1bpsz", "Plot size:", \n'
-              'choices = c("Small", "Medium", "Large"), \n'
-              'selected = "Medium", inline = TRUE), \n'
-              'radioButtons("sc1a1bfsz", "Font size:", \n'
-              'choices = c("Small", "Medium", "Large"), \n'
-              'selected = "Medium", inline = TRUE) \n'
-              '), \n'
-              'column( \n'
-              '6, radioButtons("sc1a1basp", "Aspect ratio:", \n'
-              'choices = c("Square", "Fixed", "Free"), \n'
-              'selected = "Square", inline = TRUE), \n'
-              'checkboxInput("sc1a1btxt", "Show axis text", value = FALSE) \n'
-              ') \n'
-              ') \n'
-              ') \n'
-              ')  # End of column (6 space) \n'
-              '),   # End of fluidRow (4 space) \n'
-              'fluidRow( \n'
-              'column( \n'
-              '6, style="border-right: 2px solid black", h4("Split dataset"), \n'
-              'fluidRow( \n'
-              'column( \n'
-              '12, selectInput("sc1basplit1", "Split dataset:", \n'
-              'choices = sc1conf[sc1conf$split==TRUE]$UI) \n'
-              ') \n'
-              ') \n'
-              ') \n'
-              '), \n'
-              'fluidRow( \n'
-              'column( \n'
-              '6, style="border-right: 2px solid black", h4("Cell information"), \n'
-              'fluidRow( \n'
-              'column( \n'
-              '6, selectInput("sc1a1binp1", "Cell information:", \n'
-              'choices = sc1conf$UI, \n'
-              'selected = sc1def$meta1) %>% \n'
-              'helper(type = "inline", size = "m", fade = TRUE, \n'
-              'title = "Cell information to colour cells by", \n'
-              'content = c("Select cell information to colour cells", \n'
-              '"- Categorical covariates have a fixed colour palette", \n'
-              'paste0("- Continuous covariates are coloured in a ", \n'
-              '"Blue-Yellow-Red colour scheme, which can be ", \n'
-              '"changed in the plot controls"))) \n'
-              '), \n'
-              'column( \n'
-              '6, actionButton("sc1a1btog1", "Toggle plot controls"), \n'
-              'conditionalPanel( \n'
-              'condition = "input.sc1a1btog1 % 2 == 1", \n'
-              'radioButtons("sc1a1bcol1", "Colour (Continuous data):", \n'
-              'choices = c("White-Red","Blue-Yellow-Red","Yellow-Green-Purple"), \n'
-              'selected = "Blue-Yellow-Red"), \n'
-              'radioButtons("sc1a1bord1", "Plot order:", \n'
-              'choices = c("Max-1st", "Min-1st", "Original", "Random"), \n'
-              'selected = "Original", inline = TRUE), \n'
-              'checkboxInput("sc1a1blab1", "Show cell info labels", value = TRUE) \n'
-              ') \n'
-              ') \n'
-              '), \n'
-              'fluidRow(column(12, uiOutput("sc1a1boup1.ui"))), \n'
-              'downloadButton("sc1a1boup1.pdf", "Download PDF"), \n'
-              'downloadButton("sc1a1boup1.png", "Download PNG"), br(), \n'
-              'div(style="display:inline-block", \n'
-              'numericInput("sc1a1boup1.h", "PDF / PNG height:", width = "138px", \n'
-              'min = 4, max = 20, value = 6, step = 0.5)), \n'
-              'div(style="display:inline-block", \n'
-              'numericInput("sc1a1boup1.w", "PDF / PNG width:", width = "138px", \n'
-              'min = 4, max = 20, value = 8, step = 0.5)), br(), \n'
-              'actionButton("sc1a1btog9", "Toggle to show cell numbers / statistics"), \n'
-              'conditionalPanel( \n'
-              'condition = "input.sc1a1btog9 % 2 == 1", \n'
-              'h4("Cell numbers / statistics"), \n'
-              'radioButtons("sc1a1bsplt", "Split continuous cell info into:", \n'
-              'choices = c("Quartile", "Decile"), \n'
-              'selected = "Decile", inline = TRUE), \n'
-              'dataTableOutput("sc1a1b.dt") \n'
-              ') \n'
-              '), # End of column (6 space) \n'
-              'column( \n'
-              '6, br(),br(), br(),br(),br(), br(), \n'
-              '# fluidRow( \n'
-              '#   column( \n'
-              '#     6, selectInput("sc1a1binp1", "Cell information:", \n'
-              '#                    choices = sc1conf$UI, \n'
-              '#                    selected = sc1def$meta1) %>% \n'
-              '#       helper(type = "inline", size = "m", fade = TRUE, \n'
-              '#              title = "Cell information to colour cells by", \n'
-              '#              content = c("Select cell information to colour cells", \n'
-              '#                          "- Categorical covariates have a fixed colour palette", \n'
-              '#                          paste0("- Continuous covariates are coloured in a ", \n'
-              '#                                 "Blue-Yellow-Red colour scheme, which can be ", \n'
-              '#                                 "changed in the plot controls"))) \n'
-              '#   ), \n'
-              '#   column( \n'
-              '#     6, actionButton("sc1a1btog1", "Toggle plot controls"), \n'
-              '#     conditionalPanel( \n'
-              '#       condition = "input.sc1a1btog1 % 2 == 1", \n'
-              '#       radioButtons("sc1a1bcol1", "Colour (Continuous data):", \n'
-              '#                    choices = c("White-Red","Blue-Yellow-Red","Yellow-Green-Purple"), \n'
-              '#                    selected = "Blue-Yellow-Red"), \n'
-              '#       radioButtons("sc1a1bord1", "Plot order:", \n'
-              '#                    choices = c("Max-1st", "Min-1st", "Original", "Random"), \n'
-              '#                    selected = "Original", inline = TRUE), \n'
-              '#       checkboxInput("sc1a1blab1", "Show cell info labels", value = TRUE) \n'
-              '#     ) \n'
-              '#   ) \n'
-              '# ), \n'
-              '# fluidRow( \n'
-              '#   column( \n'
-              '#     6, selectInput("sc1a1binp2", "Gene name:", choices=NULL) %>% \n'
-              '#       helper(type = "inline", size = "m", fade = TRUE, \n'
-              '#              title = "Gene expression to colour cells by", \n'
-              '#              content = c("Select gene to colour cells by gene expression", \n'
-              '#                          paste0("- Gene expression are coloured in a ", \n'
-              '#                                 "White-Red colour scheme which can be ", \n'
-              '#                                 "changed in the plot controls"))) \n'
-              '#   ), \n'
-              '#   column( \n'
-              '#     6, actionButton("sc1a1btog2", "Toggle plot controls"), \n'
-              '#     conditionalPanel( \n'
-              '#       condition = "input.sc1a1tbog2 % 2 == 1", \n'
-              '#       radioButtons("sc1a1cbol2", "Colour:", \n'
-              '#                    choices = c("White-Red","Blue-Yellow-Red","Yellow-Green-Purple"), \n'
-              '#                    selected = "White-Red"), \n'
-              '#       radioButtons("sc1a1bord2", "Plot order:", \n'
-              '#                    choices = c("Max-1st", "Min-1st", "Original", "Random"), \n'
-              '#                    selected = "Max-1st", inline = TRUE) \n'
-              '#     ) \n'
-              '#   ) \n'
-              '# ) , \n'
-              'fluidRow(column(12, uiOutput("sc1a1boup2.ui"))), \n'
-              'downloadButton("sc1a1boup2.pdf", "Download PDF"), \n'
-              'downloadButton("sc1a1boup2.png", "Download PNG"), br(), \n'
-              'div(style="display:inline-block", \n'
-              'numericInput("sc1a1boup2.h", "PDF / PNG height:", width = "138px", \n'
-              'min = 4, max = 20, value = 6, step = 0.5)), \n'
-              'div(style="display:inline-block", \n'
-              'numericInput("sc1a1boup2.w", "PDF / PNG width:", width = "138px", \n'
-              'min = 4, max = 20, value = 8, step = 0.5)) \n'
-              ')  # End of column (6 space) \n'
-              ')    # End of fluidRow (4 space) \n'
-              '),     # End of tab (2 space) \n'
+             '### Tab1.a1b: SPLIT CELL INFO \n',
+              'tabPanel( \n',
+              'HTML("SPLIT CELL INFO"), \n',
+              'h4("Cell information vs gene expression on reduced dimensions"), \n',
+              '"In this tab, users can visualise both cell information and gene ", \n',
+              '"expression side-by-side on low-dimensional representions.", \n',
+              'br(),br(), \n',
+              'fluidRow( \n',
+              'column( \n',
+              '3, h4("Dimension Reduction"), \n',
+              'fluidRow( \n',
+              'column( \n',
+              '12, selectInput("sc1a1bdrX", "X-axis:", choices = sc1conf[dimred == TRUE]$UI, \n',
+              'selected = sc1def$dimred[1]), \n',
+              'selectInput("sc1a1bdrY", "Y-axis:", choices = sc1conf[dimred == TRUE]$UI, \n',
+              'selected = sc1def$dimred[2])) \n',
+              ') \n',
+              '), # End of column (6 space) \n',
+              'column( \n',
+              '3, actionButton("sc1a1btogL", "Toggle to subset cells"), \n',
+              'conditionalPanel( \n',
+              'condition = "input.sc1a1btogL % 2 == 1", \n',
+              'selectInput("sc1a1bsub1", "Cell information to subset:", \n',
+              'choices = sc1conf[grp == TRUE]$UI, \n',
+              'selected = sc1def$grp1), \n',
+              'uiOutput("sc1a1bsub1.ui"), \n',
+              'actionButton("sc1a1bsub1all", "Select all groups", class = "btn btn-primary"), \n',
+              'actionButton("sc1a1bsub1non", "Deselect all groups", class = "btn btn-primary") \n',
+              ') \n',
+              '), # End of column (6 space) \n',
+              'column( \n',
+              '6, actionButton("sc1a1btog0", "Toggle graphics controls"), \n',
+              'conditionalPanel( \n',
+              'condition = "input.sc1a1btog0 % 2 == 1", \n',
+              'fluidRow( \n',
+              'column( \n',
+              '6, sliderInput("sc1a1bsiz", "Point size:", \n',
+              'min = 0, max = 4, value = 1.25, step = 0.25), \n',
+              'radioButtons("sc1a1bpsz", "Plot size:", \n',
+              'choices = c("Small", "Medium", "Large"), \n',
+              'selected = "Medium", inline = TRUE), \n',
+              'radioButtons("sc1a1bfsz", "Font size:", \n',
+              'choices = c("Small", "Medium", "Large"), \n',
+              'selected = "Medium", inline = TRUE) \n',
+              '), \n',
+              'column( \n',
+              '6, radioButtons("sc1a1basp", "Aspect ratio:", \n',
+              'choices = c("Square", "Fixed", "Free"), \n',
+              'selected = "Square", inline = TRUE), \n',
+              'checkboxInput("sc1a1btxt", "Show axis text", value = FALSE) \n',
+              ') \n',
+              ') \n',
+              ') \n',
+              ')  # End of column (6 space) \n',
+              '),   # End of fluidRow (4 space) \n',
+              'fluidRow( \n',
+              'column( \n',
+              '6, style="border-right: 2px solid black", h4("Split dataset"), \n',
+              'fluidRow( \n',
+              'column( \n',
+              '12, selectInput("sc1basplit1", "Split dataset:", \n',
+              'choices = sc1conf[sc1conf$split==TRUE]$UI) \n',
+              ') \n',
+              ') \n',
+              ') \n',
+              '), \n',
+              'fluidRow( \n',
+              'column( \n',
+              '6, style="border-right: 2px solid black", h4("Cell information"), \n',
+              'fluidRow( \n',
+              'column( \n',
+              '6, selectInput("sc1a1binp1", "Cell information:", \n',
+              'choices = sc1conf$UI, \n',
+              'selected = sc1def$meta1) %>% \n',
+              'helper(type = "inline", size = "m", fade = TRUE, \n',
+              'title = "Cell information to colour cells by", \n',
+              'content = c("Select cell information to colour cells", \n',
+              '"- Categorical covariates have a fixed colour palette", \n',
+              'paste0("- Continuous covariates are coloured in a ", \n',
+              '"Blue-Yellow-Red colour scheme, which can be ", \n',
+              '"changed in the plot controls"))) \n',
+              '), \n',
+              'column( \n',
+              '6, actionButton("sc1a1btog1", "Toggle plot controls"), \n',
+              'conditionalPanel( \n',
+              'condition = "input.sc1a1btog1 % 2 == 1", \n',
+              'radioButtons("sc1a1bcol1", "Colour (Continuous data):", \n',
+              'choices = c("White-Red","Blue-Yellow-Red","Yellow-Green-Purple"), \n',
+              'selected = "Blue-Yellow-Red"), \n',
+              'radioButtons("sc1a1bord1", "Plot order:", \n',
+              'choices = c("Max-1st", "Min-1st", "Original", "Random"), \n',
+              'selected = "Original", inline = TRUE), \n',
+              'checkboxInput("sc1a1blab1", "Show cell info labels", value = TRUE) \n',
+              ') \n',
+              ') \n',
+              '), \n',
+              'fluidRow(column(12, uiOutput("sc1a1boup1.ui"))), \n',
+              'downloadButton("sc1a1boup1.pdf", "Download PDF"), \n',
+              'downloadButton("sc1a1boup1.png", "Download PNG"), br(), \n',
+              'div(style="display:inline-block", \n',
+              'numericInput("sc1a1boup1.h", "PDF / PNG height:", width = "138px", \n',
+              'min = 4, max = 20, value = 6, step = 0.5)), \n',
+              'div(style="display:inline-block", \n',
+              'numericInput("sc1a1boup1.w", "PDF / PNG width:", width = "138px", \n',
+              'min = 4, max = 20, value = 8, step = 0.5)), br(), \n',
+              'actionButton("sc1a1btog9", "Toggle to show cell numbers / statistics"), \n',
+              'conditionalPanel( \n',
+              'condition = "input.sc1a1btog9 % 2 == 1", \n',
+              'h4("Cell numbers / statistics"), \n',
+              'radioButtons("sc1a1bsplt", "Split continuous cell info into:", \n',
+              'choices = c("Quartile", "Decile"), \n',
+              'selected = "Decile", inline = TRUE), \n',
+              'dataTableOutput("sc1a1b.dt") \n',
+              ') \n',
+              '), # End of column (6 space) \n',
+              'column( \n',
+              '6, br(),br(), br(),br(),br(), br(), \n',
+              '# fluidRow( \n',
+              '#   column( \n',
+              '#     6, selectInput("sc1a1binp1", "Cell information:", \n',
+              '#                    choices = sc1conf$UI, \n',
+              '#                    selected = sc1def$meta1) %>% \n',
+              '#       helper(type = "inline", size = "m", fade = TRUE, \n',
+              '#              title = "Cell information to colour cells by", \n',
+              '#              content = c("Select cell information to colour cells", \n',
+              '#                          "- Categorical covariates have a fixed colour palette", \n',
+              '#                          paste0("- Continuous covariates are coloured in a ", \n',
+              '#                                 "Blue-Yellow-Red colour scheme, which can be ", \n',
+              '#                                 "changed in the plot controls"))) \n',
+              '#   ), \n',
+              '#   column( \n',
+              '#     6, actionButton("sc1a1btog1", "Toggle plot controls"), \n',
+              '#     conditionalPanel( \n',
+              '#       condition = "input.sc1a1btog1 % 2 == 1", \n',
+              '#       radioButtons("sc1a1bcol1", "Colour (Continuous data):", \n',
+              '#                    choices = c("White-Red","Blue-Yellow-Red","Yellow-Green-Purple"), \n',
+              '#                    selected = "Blue-Yellow-Red"), \n',
+              '#       radioButtons("sc1a1bord1", "Plot order:", \n',
+              '#                    choices = c("Max-1st", "Min-1st", "Original", "Random"), \n',
+              '#                    selected = "Original", inline = TRUE), \n',
+              '#       checkboxInput("sc1a1blab1", "Show cell info labels", value = TRUE) \n',
+              '#     ) \n',
+              '#   ) \n',
+              '# ), \n',
+              '# fluidRow( \n',
+              '#   column( \n',
+              '#     6, selectInput("sc1a1binp2", "Gene name:", choices=NULL) %>% \n',
+              '#       helper(type = "inline", size = "m", fade = TRUE, \n',
+              '#              title = "Gene expression to colour cells by", \n',
+              '#              content = c("Select gene to colour cells by gene expression", \n',
+              '#                          paste0("- Gene expression are coloured in a ", \n',
+              '#                                 "White-Red colour scheme which can be ", \n',
+              '#                                 "changed in the plot controls"))) \n',
+              '#   ), \n',
+              '#   column( \n',
+              '#     6, actionButton("sc1a1btog2", "Toggle plot controls"), \n',
+              '#     conditionalPanel( \n',
+              '#       condition = "input.sc1a1tbog2 % 2 == 1", \n',
+              '#       radioButtons("sc1a1cbol2", "Colour:", \n',
+              '#                    choices = c("White-Red","Blue-Yellow-Red","Yellow-Green-Purple"), \n',
+              '#                    selected = "White-Red"), \n',
+              '#       radioButtons("sc1a1bord2", "Plot order:", \n',
+              '#                    choices = c("Max-1st", "Min-1st", "Original", "Random"), \n',
+              '#                    selected = "Max-1st", inline = TRUE) \n',
+              '#     ) \n',
+              '#   ) \n',
+              '# ) , \n',
+              'fluidRow(column(12, uiOutput("sc1a1boup2.ui"))), \n',
+              'downloadButton("sc1a1boup2.pdf", "Download PDF"), \n',
+              'downloadButton("sc1a1boup2.png", "Download PNG"), br(), \n',
+              'div(style="display:inline-block", \n',
+              'numericInput("sc1a1boup2.h", "PDF / PNG height:", width = "138px", \n',
+              'min = 4, max = 20, value = 6, step = 0.5)), \n',
+              'div(style="display:inline-block", \n',
+              'numericInput("sc1a1boup2.w", "PDF / PNG width:", width = "138px", \n',
+              'min = 4, max = 20, value = 8, step = 0.5)) \n',
+              ')  # End of column (6 space) \n',
+              ')    # End of fluidRow (4 space) \n',
+              '),     # End of tab (2 space) \n',
              '  ### Tab1.a2: cellInfo vs cellInfo on dimRed \n',
              '  tabPanel( \n',
              '    HTML("CellInfo vs CellInfo"), \n',
