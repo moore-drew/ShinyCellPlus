@@ -1,7 +1,7 @@
-Package: ShinyCellDEV
+Package: ShinyCellPLUS
 Type: Package
 Title: Shiny Interactive Web Apps for Single-Cell Data
-Version: 2.2.1
+Version: 2.3.1
 Author: John F. Ouyang
 Maintainer: John F. Ouyang <john.f.ouyang@gmail.com>
 Description: Shiny apps for interactive exploration of single-cell data
