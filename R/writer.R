@@ -1686,11 +1686,18 @@ wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
   #TODO: determine whether to use these flags or the {prefix}m_all == FALSE that
   # is defined at the top based upon file existence (second security check, really),
   # ... or maybe move those to here?
+  #
+  # make a fix for if the files are no longer there other than the standard red
+  # error response on the page
+
   if(markers.all == TRUE) {
     graphs <- graphs + glue::glue(
              '  output${prefix}m_all <- DT::renderDataTable( \n',
              '    {prefix}m_all \n',
              '  ) \n',
+             #'  output${prefix}m_all <- renderDT({{ \n',
+             #'    datatable({prefix}m_all) \n',
+             #'  }}) \n',
              ' \n',
              ' \n'
     )
@@ -1701,6 +1708,9 @@ wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
              '  output${prefix}m_t20 <- DT::renderDataTable( \n',
              '      {prefix}m_t20 \n',
              '  ) \n',
+             #'  output${prefix}m_t20<- renderDT({{ \n',
+             #'    datatable({prefix}m_t20) \n',
+             #'  }}) \n',
              ' \n',
              ' \n'
     )
@@ -1711,6 +1721,9 @@ wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
             '   output${prefix}de_genes <- DT::renderDataTable( \n',
             '       {prefix}de_genes \n',
             '     ) \n',
+            #'  output${prefix}de_genes <- renderDT({{ \n',
+            #'    datatable({prefix}de_genes) \n',
+            #'  }}) \n',
             ' \n',
             ' \n'
     )
@@ -1830,9 +1843,14 @@ wrSVgeneSig <- function(prefix, gene.ranks) {
             ' }} \n',
             ' \n',
             ' output$gsig_plot <- renderPlot({{ \n',
-            '   scGeneSig(input$gsig_list, input$gsig_group, input$gsig_subset, input$gsig_subset2, \n',
-            '             input$gsig_subset_toggle, input$gsig_graphics_point_size, input$gsig_graphics_font_size, \n',
-            '             input$gsig_graphics_color, input$gsig_graphics_cell_info) \n',
+            '   if(class({prefix}gene_ranks) != "aucellResults") {{ \n',
+            '     ggplot() + labs(title="ERROR: data file \'{prefix}gene_ranks.rds\' not found, cannot create plots!") \n',
+            '   }} \n',
+            '   else {{ \n',
+            '     scGeneSig(input$gsig_list, input$gsig_group, input$gsig_subset, input$gsig_subset2, \n',
+            '               input$gsig_subset_toggle, input$gsig_graphics_point_size, input$gsig_graphics_font_size, \n',
+            '               input$gsig_graphics_color, input$gsig_graphics_cell_info) \n',
+            '   }} \n',
             ' }}) \n',
             ' \n',
             ' output$gsig_download.png <- downloadHandler( \n',
