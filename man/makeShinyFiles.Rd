@@ -16,7 +16,11 @@ makeShinyFiles(
   default.gene2 = NA,
   default.multigene = NA,
   default.dimred = NA,
-  chunkSize = 500
+  chunkSize = 500,
+  markers.all = FALSE,
+  markers.top20 = FALSE,
+  de.genes = FALSE,
+  gene.ranks = FALSE
 )
 }
 \arguments{

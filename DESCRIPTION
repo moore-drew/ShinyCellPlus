@@ -1,10 +1,10 @@
 Package: ShinyCellPLUS
 Type: Package
-Title: Shiny Interactive Web Apps for Single-Cell Data
-Version: 2.3.1
-Author: John F. Ouyang
-Maintainer: John F. Ouyang <john.f.ouyang@gmail.com>
-Description: Shiny apps for interactive exploration of single-cell data
+Title: Updated Shiny Web Apps for Single-Cell and Multiomic Data
+Version: 1.1.0
+Author: Drew Moore
+Maintainer: Drew Moore <mooredr@musc.edu>
+Description: Shiny apps for interactive exploration of single-cell data. Based on the ShinyCell Project by John F. Ouyang <https://github.com/SGDDNB/ShinyCell>
 License: GPL-3
 Suggests:
     Seurat               (>= 3.0.0),
@@ -23,4 +23,4 @@ Depends:
     RColorBrewer (>= 1.1-2)
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
