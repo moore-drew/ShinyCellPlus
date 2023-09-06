@@ -23,13 +23,13 @@ Depends:
     RColorBrewer (>= 1.1-2)
 biocViews:
 Imports:
-    AUCell
-    crul
-    gistr
-    httpcode
-    rbokeh
-    triebeard
-    urltools
+    AUCell                ,
+    crul                  ,
+    gistr                 ,
+    httpcode              ,
+    rbokeh                ,
+    triebeard             ,
+    urltools              ,
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.2.3
