@@ -115,7 +115,7 @@ createConfig <- function(obj, meta.to.include = NA, legendCols = 4,
                              collapse = "|")
         tmpConf$fRow = ceiling(nLevels / legendCols)
         tmpConf$grp = TRUE
-        if(nLevels == 2) {
+        if(nLevels >= 2) {
           tmpConf$split = TRUE
         }
       } else if(nLevels == 1){

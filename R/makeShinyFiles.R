@@ -64,7 +64,7 @@ makeShinyFiles <- function(
   obj, scConf, gex.assay = NA, gex.slot = c("data", "scale.data", "counts"), 
   gene.mapping = FALSE, shiny.prefix = "sc1", shiny.dir = "shinyApp/",
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, chunkSize = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE){
+  default.dimred = NA, chunkSize = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE){
   ### Preprocessing and checks
   # Generate defaults for gex.assay / gex.slot
   if(class(obj)[1] == "Seurat"){
@@ -145,10 +145,10 @@ makeShinyFiles <- function(
   if(gene.mapping[1] == TRUE){
     if(sum(grepl("^ENSG000", gex.rownm)) >= sum(grepl("^ENMUSG000", gex.rownm))){
       tmp1 = fread(system.file("extdata", "geneMapHS.txt.gz", 
-                               package = "ShinyCell"))
+                               package = "ShinyCellPLUS"))
     } else {
       tmp1 = fread(system.file("extdata", "geneMapMM.txt.gz", 
-                               package = "ShinyCell"))
+                               package = "ShinyCellPLUS"))
     }
     gene.mapping = tmp1$geneName
     names(gene.mapping) = tmp1$geneID
@@ -440,57 +440,102 @@ makeShinyFiles <- function(
 
   
   if(class(obj)[1]=='Seurat') {
+    sc1conf$extra_tabs[1] = TRUE
     if(markers.all==TRUE) { 
       if(!is.null(obj@misc$markers$presto$all)){
         m_all <- obj@misc$markers$presto$all
         names(m_all)[names(m_all) == 'group'] <- 'cluster'
-        sc1conf$extra_tabs[1] = TRUE
+        #sc1conf$extra_tabs[1] = TRUE
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
       }
       else {
-        print("Warning: 'markers.all' not found in Seurat (structure expected: seurat@misc$markers$presto$all);\n \
-          corresponding Shiny tab will be created but with an error message instead of what is expected...\n")
+        cat("Warning: 'markers.all' not found in Seurat (structure expected: seurat@misc$markers$presto$all);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n")
         #sc1conf$extra_tabs[1] = FALSE
       }
     }
 
     if(markers.top20==TRUE) {
+      sc1conf$extra_tabs[2] = TRUE
       if(!is.null(obj@misc$markers$presto$top_20)) {
         m_t20 <- obj@misc$markers$presto$top_20
         names(m_t20)[names(m_t20) == 'group'] <- 'cluster'
-        sc1conf$extra_tabs[2] = TRUE
+
+        if("10" %in% colnames(m_t20)) {
+          rank_i <- which(colnames(m_t20) == "rank")
+          sorted_colnames <- c("rank", sort(as.numeric(colnames(m_t20[,-c(rank_i)]))))
+        } else {
+          sorted_colnames <- colnames(top)
+        }
+        m_t20 <- m_t20[,sorted_colnames]
+
+        #sc1conf$extra_tabs[2] = TRUE
         saveRDS(m_t20, file=paste0(shiny.dir, "/", shiny.prefix, "m_t20.rds"))
       }
       else {
-        print("Warning: 'markers.top20' not found in Seurat (structure expected: seurat@misc$markers$presto$top_20);\n \
-          corresponding Shiny tab will be created but with an error message instead of what is expected...\n")
+        cat("Warning: 'markers.top20' not found in Seurat (structure expected: seurat@misc$markers$presto$top_20);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[2] = FALSE
       }
     }
 
     if(de.genes==TRUE) { 
+      sc1conf$extra_tabs[3] = TRUE
+      #TODO: figure out how to deal with multiple libra tables
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         de_genes <- obj@misc$DE_genes$libra$overall
-        sc1conf$extra_tabs[3] = TRUE
+        #sc1conf$extra_tabs[3] = TRUE
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes.rds"))
       }
       else {
-        print("Warning: 'de.genes' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\n \
-          corresponding Shiny tab will be created but with an error message instead of what is expected...\n")
+        cat("Warning: 'de.genes' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[3] = FALSE
       }
     }
 
     if(gene.ranks==TRUE) {
+      sc1conf$extra_tabs[4] = TRUE
       if(!is.null(obj@misc$gene_ranks$aucell$all)) {
         gene_ranks <- obj@misc$gene_ranks$aucell$all
-        sc1conf$extra_tabs[4] = TRUE
+        #sc1conf$extra_tabs[4] = TRUE
         saveRDS(gene_ranks, file=paste0(shiny.dir, "/", shiny.prefix, "gene_ranks.rds"))
       }
       else {
-        print("Warning: 'gene.ranks' not found in Seurat (structure expected: seurat@misc$gene_ranks$aucell$all);\n \
-          corresponding Shiny tab will be created but with an error message instead of what is expected...\n")
+        cat("Warning: 'gene.ranks' not found in Seurat (structure expected: seurat@misc$gene_ranks$aucell$all);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[4] = FALSE
+      }
+    }
+
+     if(volc.plot==TRUE) {
+      sc1conf$extra_tabs[5] = TRUE
+      # TODO: figure out how to deal with multiple DE_genes methods
+      # (will have to change the 'renames' accordingly)
+      if(!is.null(obj@misc$DE_genes)) {
+        #methods <- names(obj@misc$DE_genes)
+        #de_list <- names(obj@misc$DE_genes[[methods]])
+        de_list <- names(obj@misc$DE_genes$libra)
+
+        #for(method in c(1:length(methods))) {
+          for(de in c(1:length(de_list))) {
+            #de_genes <- obj@misc$DE_genes[[method]][[de]]
+            de_genes <- obj@misc$DE_genes$libra[[de_list[de]]]
+            de_genes <- rename(de_genes, genes = gene) 
+            de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
+            de_genes <- rename(de_genes, pvalue = p_val_adj)
+            saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "DEG_", de_list[de], "_ggvolc.rds"))
+          }
+        #}
+      }
+
+      # if(!is.null(obj@misc$DE_genes$libra$overall)) {
+      #   de_genes <- obj@misc$DE_genes$libra$overall
+      #   de_genes <- rename(de_genes, genes = gene) 
+      #   de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
+      #   de_genes <- rename(de_genes, pvalue = p_val_adj)
+      #   #sc1conf$extra_tabs[5] = TRUE
+      #   saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+      # }
+      else {
+        cat("Warning: 'volc.plot' not found in Seurat (structure expected: seurat@misc$DE_genes$<diff. exp. method>$<table output>);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+        #sc1conf$extra_tabs[5] = FALSE
       }
     }
   }
