@@ -11,7 +11,11 @@ makeShinyCodes(
   shiny.dir,
   enableSubset = TRUE,
   defPtSiz = 1.25,
-  ganalytics = NA
+  ganalytics = NA,
+  markers.all = FALSE,
+  markers.top20 = FALSE,
+  de.genes = FALSE,
+  gene.ranks = FALSE
 )
 }
 \arguments{

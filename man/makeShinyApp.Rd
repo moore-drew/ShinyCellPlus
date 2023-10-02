@@ -19,7 +19,11 @@ makeShinyApp(
   default.gene1 = NA,
   default.gene2 = NA,
   default.multigene = NA,
-  default.dimred = NA
+  default.dimred = NA,
+  markers.all = FALSE,
+  markers.top20 = FALSE,
+  de.genes = FALSE,
+  gene.ranks = FALSE
 )
 }
 \arguments{

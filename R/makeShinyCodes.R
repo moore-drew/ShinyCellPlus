@@ -23,7 +23,7 @@
 #'
 #' @author John F. Ouyang
 #'
-#' @import data.table readr glue
+#' @import data.table readr glue AUCell crul httpcode rbokeh gistr triebeard urltools
 #'
 #' @examples
 #' # Example citation
