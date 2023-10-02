@@ -77,22 +77,21 @@ makeShinyApp <- function(
   shiny.title = "scRNA-seq shiny app", shiny.footnotes = "",
   shiny.dir = "shinyApp/", enableSubset = TRUE, defPtSiz = 1.25, ganalytics=NA,
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE){
+  default.dimred = NA, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE){
   
   # Checks are performed in respective functions
   # Wrapper for two main functions
 
-  #TODO: use sc1conf$tables and get rid of passing those arguments every time?
   makeShinyFiles(obj = obj, scConf = scConf, 
                  gex.assay = gex.assay[1], gex.slot = gex.slot[1], 
                  gene.mapping = gene.mapping, 
                  shiny.prefix = "sc1", shiny.dir = shiny.dir, markers.all = markers.all, markers.top20 = markers.top20, 
-                 de.genes = de.genes, gene.ranks = gene.ranks, default.gene1, default.gene2, default.multigene, default.dimred)
+                 de.genes = de.genes, gene.ranks = gene.ranks, volc.plot = volc.plot, default.gene1, default.gene2, default.multigene, default.dimred)
   makeShinyCodes(shiny.title = shiny.title, shiny.footnotes = shiny.footnotes,
                  shiny.prefix = "sc1", shiny.dir = shiny.dir, 
                  enableSubset = enableSubset, defPtSiz = defPtSiz,
                  ganalytics = ganalytics, markers.all = markers.all, markers.top20 = markers.top20, de.genes = de.genes,
-                 gene.ranks = gene.ranks)
+                 gene.ranks = gene.ranks, volc.plot = volc.plot)
 
 }
 
