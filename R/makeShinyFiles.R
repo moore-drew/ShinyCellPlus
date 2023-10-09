@@ -479,10 +479,14 @@ makeShinyFiles <- function(
 
     if(de.genes==TRUE) { 
       sc1conf$extra_tabs[3] = TRUE
-      #TODO: figure out how to deal with multiple libra tables
+      # TODO: figure out how to deal with multiple libra tables, similar to how
+      # it is dealt with in the lower volc.plot conditional
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         de_genes <- obj@misc$DE_genes$libra$overall
         #sc1conf$extra_tabs[3] = TRUE
+        de_genes$de_family<-NULL
+        de_genes$de_method<-NULL
+        de_genes$de_type<-NULL
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes.rds"))
       }
       else {
@@ -506,35 +510,44 @@ makeShinyFiles <- function(
 
      if(volc.plot==TRUE) {
       sc1conf$extra_tabs[5] = TRUE
-      # TODO: figure out how to deal with multiple DE_genes methods
-      # (will have to change the 'renames' accordingly)
-      if(!is.null(obj@misc$DE_genes)) {
-        #methods <- names(obj@misc$DE_genes)
-        #de_list <- names(obj@misc$DE_genes[[methods]])
-        de_list <- names(obj@misc$DE_genes$libra)
 
-        #for(method in c(1:length(methods))) {
-          for(de in c(1:length(de_list))) {
-            #de_genes <- obj@misc$DE_genes[[method]][[de]]
-            de_genes <- obj@misc$DE_genes$libra[[de_list[de]]]
-            de_genes <- rename(de_genes, genes = gene) 
-            de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
-            de_genes <- rename(de_genes, pvalue = p_val_adj)
-            saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "DEG_", de_list[de], "_ggvolc.rds"))
-          }
-        #}
-      }
+      # # TODO: figure out how to deal with multiple DE_genes methods
+      # # (will have to change the 'renames' accordingly)
+      # if(!is.null(obj@misc$DE_genes)) {
+      #   #methods <- names(obj@misc$DE_genes)
+      #   #de_list <- names(obj@misc$DE_genes[[methods]])
 
-      # if(!is.null(obj@misc$DE_genes$libra$overall)) {
-      #   de_genes <- obj@misc$DE_genes$libra$overall
-      #   de_genes <- rename(de_genes, genes = gene) 
-      #   de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
-      #   de_genes <- rename(de_genes, pvalue = p_val_adj)
-      #   #sc1conf$extra_tabs[5] = TRUE
-      #   saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+      #   # TODO: support for methods other than Libra
+      #   de_list <- names(obj@misc$DE_genes$libra)
+
+      #   #for(method in c(1:length(methods))) {
+      #     for(de in c(1:length(de_list))) { # for(de in de_list) ?
+      #       #de_genes <- obj@misc$DE_genes[[method]][[de]]
+      #       de_genes <- obj@misc$DE_genes$libra[[de_list[de]]] # $libra[[de]] ?
+      #       de_genes <- rename(de_genes, genes = gene) 
+      #       de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
+      #       de_genes <- rename(de_genes, pvalue = p_val_adj)
+      #       saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "DEG_", de_list[de], "_ggvolc.rds"))
+      #     }
+      #   #}
       # }
+
+      if(!is.null(obj@misc$DE_genes$libra$overall)) {
+        # check to see if has correct column names?
+        # or maybe wrap this in a try-catch for rename
+        # errors?
+        de_genes <- obj@misc$DE_genes$libra$overall
+        de_genes <- rename(de_genes, genes = gene) 
+        de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
+        de_genes <- rename(de_genes, pvalue = p_val_adj)
+        de_genes$de_name <- as.factor(de_genes$de_name)
+        sc1conf$volc<-FALSE
+        sc1conf$volc[1]<-paste0(levels(de_genes$de_name), collapse="|")
+        #sc1conf$extra_tabs[5] = TRUE
+        saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+      }
       else {
-        cat("Warning: 'volc.plot' not found in Seurat (structure expected: seurat@misc$DE_genes$<diff. exp. method>$<table output>);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+        cat("Warning: 'volc.plot' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[5] = FALSE
       }
     }
