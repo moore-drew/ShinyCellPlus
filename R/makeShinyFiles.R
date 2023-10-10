@@ -465,7 +465,7 @@ makeShinyFiles <- function(
           rank_i <- which(colnames(m_t20) == "rank")
           sorted_colnames <- c("rank", sort(as.numeric(colnames(m_t20[,-c(rank_i)]))))
         } else {
-          sorted_colnames <- colnames(top)
+          sorted_colnames <- colnames(m_t20)
         }
         m_t20 <- m_t20[,sorted_colnames]
 
