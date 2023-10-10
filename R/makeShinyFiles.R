@@ -49,7 +49,7 @@
 #'
 #' @author John F. Ouyang
 #'
-#' @import data.table hdf5r reticulate hdf5r
+#' @import data.table hdf5r reticulate hdf5r dplyr
 #'
 #' @examples
 #' makeShinyFiles(seu, scConf, gex.assay = "RNA", gex.slot = "data",
