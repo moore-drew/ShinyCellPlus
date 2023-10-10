@@ -437,6 +437,7 @@ makeShinyFiles <- function(
   saveRDS(sc1def,  file = paste0(shiny.dir, "/", shiny.prefix, "def.rds"))
 
   sc1conf$extra_tabs <- FALSE
+  sc1conf$DEs<-FALSE
 
   
   if(class(obj)[1]=='Seurat') {
@@ -484,9 +485,11 @@ makeShinyFiles <- function(
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         de_genes <- obj@misc$DE_genes$libra$overall
         #sc1conf$extra_tabs[3] = TRUE
-        de_genes$de_family<-NULL
-        de_genes$de_method<-NULL
-        de_genes$de_type<-NULL
+        de_genes$de_family <- NULL
+        de_genes$de_method <- NULL
+        de_genes$de_type <- NULL
+        de_genes$de_name <- as.factor(de_genes$de_name)
+        sc1conf$DEs[1] <- paste0(levels(de_genes$de_name), collapse="|")
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes.rds"))
       }
       else {
@@ -537,12 +540,11 @@ makeShinyFiles <- function(
         # or maybe wrap this in a try-catch for rename
         # errors?
         de_genes <- obj@misc$DE_genes$libra$overall
-        de_genes <- rename(de_genes, genes = gene) 
-        de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
-        de_genes <- rename(de_genes, pvalue = p_val_adj)
+        de_genes <- dplyr::rename(de_genes, genes = gene) 
+        de_genes <- dplyr::rename(de_genes, log2FoldChange = avg_logFC) 
+        de_genes <- dplyr::rename(de_genes, pvalue = p_val_adj)
         de_genes$de_name <- as.factor(de_genes$de_name)
-        sc1conf$volc<-FALSE
-        sc1conf$volc[1]<-paste0(levels(de_genes$de_name), collapse="|")
+        sc1conf$DEs[2] <- paste0(levels(de_genes$de_name), collapse="|")
         #sc1conf$extra_tabs[5] = TRUE
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
       }
