@@ -1741,15 +1741,8 @@ wrSVmain <- function(prefix, subst = "") {
 #' @rdname wrSVmarkersDE
 #' @export wrSVmarkersDE
 #'
-wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
+wrSVmarkersAll <- function(prefix, markers.all, markers.top20, de.genes) {
   graphs <- ''
-  #TODO: determine whether to use these flags or the {prefix}m_all == FALSE that
-  # is defined at the top based upon file existence (second security check, really),
-  # ... or maybe move those to here?
-  #
-  # make a fix for if the files are no longer there other than the standard red
-  # error response on the page
-
   if(markers.all == TRUE) {
     graphs <- graphs + glue::glue(
              '  output${prefix}m_all <- DT::renderDataTable( \n',
@@ -1762,7 +1755,11 @@ wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
              ' \n'
     )
   }
+  return(graphs)
+}
 
+wrSVmarkersTop20 <- function(prefix, markers.top20) {
+  graphs<-''
   if(markers.top20 == TRUE) {
     graphs <- graphs + glue::glue(
              '  output${prefix}m_t20 <- DT::renderDataTable( \n',
@@ -1775,21 +1772,26 @@ wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
              ' \n'
     )
   }
+  return(graphs)
+}
 
+wrSVdeGenes <- function(prefix, de.genes) {
+  #graphs<-''
   if(de.genes == TRUE) {
-    graphs <- graphs + glue::glue(
-            '   output${prefix}de_genes <- DT::renderDataTable( \n',
-            '       {prefix}de_genes, filter="top" \n',
-            '     ) \n',
-            #'  output${prefix}de_genes <- renderDT({{ \n',
-            #'    datatable({prefix}de_genes) \n',
-            #'  }}) \n',
+    #graphs <- graphs + glue::glue(
+    glue::glue(
+            '   observeEvent(input${prefix}de_genes_select, {{ \n',
+            '     #print(input${prefix}de_genes_select) \n',
+            '   }}) \n',
+            '   \n',
+            '   output${prefix}de_genes.ui <- renderDataTable ( \n',
+            '     subset({prefix}de_genes, de_name == input${prefix}de_genes_select), filter="top" \n',
+            '   ) \n',
             ' \n',
             ' \n'
     )
   }
-
-  return(graphs)
+  #return(graphs)
 }
 
 #' Insert data server cues for gene signature manipulate via AUCell
@@ -1797,11 +1799,10 @@ wrSVmarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
 #' @rdname wrSVgeneSig
 #' @export wrSVgeneSig
 #'
-# incorporate within previous function?
 wrSVgeneSig <- function(prefix, gene.ranks) {
   
   #graphs <- ''
-  #if(gene.ranks == TRUE ) {
+  if(gene.ranks == TRUE ) {
   #  graphs<-graphs + glue::glue( 
   glue::glue(
             ' \n',
@@ -1963,13 +1964,13 @@ wrSVgeneSig <- function(prefix, gene.ranks) {
             ' ) \n',
             ' \n'
     )
-  #}
+  }
   #return(graphs)
 }
 
 wrSVvolc <- function(prefix, volc.plot) {
   #graphs <- ''
-  #if(volc.plot == TRUE) {
+  if(volc.plot == TRUE) {
   #  graphs <- graphs + glue::glue(
   glue::glue(
             '  #### volcano plot \n',
@@ -2057,7 +2058,7 @@ wrSVvolc <- function(prefix, volc.plot) {
             .trim=FALSE
   )
     #)
-  #}
+  }
   #return(graphs)
 }
 
@@ -3560,7 +3561,7 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
 #' @export wrUImarkersDE
 #'
 
-wrUImarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
+wrUImarkersAll <- function(prefix, markers.all) {
   graphs <- ''
   if(markers.all == TRUE) {
     graphs <- graphs + glue::glue(
@@ -3579,6 +3580,11 @@ wrUImarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
         .trim = FALSE
       )
   }
+  return(graphs)
+}
+
+wrUImarkersTop20 <- function(prefix, markers.top20) {
+  graphs <- ''
   if(markers.top20 == TRUE) {
     graphs <- graphs + glue::glue(
         '  , \n',
@@ -3596,6 +3602,11 @@ wrUImarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
         .trim = FALSE
       )
   }
+  return(graphs)
+}
+
+wrUIdeGenes <- function(prefix, de.genes) {
+  graphs <- ''
   if(de.genes == TRUE) {
     graphs <- graphs + glue::glue(
         '  , \n',
@@ -3604,8 +3615,10 @@ wrUImarkersDE <- function(prefix, markers.all, markers.top20, de.genes) {
         '    h4("This page is meant to display associations between genetic markers and cell types tagged to their Seurat data cluster."), \n',
         '    br(),br(), \n',
         '    fluidRow( \n',
+        '      selectInput("{prefix}de_genes_select", "Select differential expression:", choices=strsplit({prefix}conf[DEs!=FALSE]$DEs[1], "\\\\|")[[1]]), # would you ever want to look at all? \n',
         '      column(12, \n',
-        '        DT::dataTableOutput("{prefix}de_genes") \n',
+        '        #DT::dataTableOutput("{prefix}de_genes.ui") \n',
+        '        dataTableOutput("{prefix}de_genes.ui") \n',
         '      ) \n',
         '    ) \n',
         '  ) \n',
@@ -3691,7 +3704,7 @@ wrUIvolc <- function(prefix, volc.plot) {
       '    fluidRow( \n',
       '      column(3, style="border-right: 2px solid black", \n',
       '        #textAreaInput("volc_tags", "Genes to tag") \n',
-      '        selectInput("volc_de_select", "Select differential expression:", choices=strsplit({prefix}conf[volc!=FALSE]$volc, "\\\\|")[[1]]), # would you ever want to look at all? \n',
+      '        selectInput("volc_de_select", "Select differential expression:", choices=strsplit({prefix}conf[DEs!=FALSE]$DEs[2], "\\\\|")[[1]]), # would you ever want to look at all? \n',
       '        actionButton("volc_subset_toggle", "Toggle to subset cells"), \n',
       '        conditionalPanel("input.volc_subset_toggle % 2 == 1", \n',
       '                         selectInput("volc_subset", "Cell information to subset:", choices={prefix}conf[grp==TRUE]$UI, selected={prefix}def$grp1), \n',
