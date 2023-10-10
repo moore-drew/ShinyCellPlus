@@ -1736,12 +1736,14 @@ wrSVmain <- function(prefix, subst = "") {
              '  \n')
 }
 
-#' Insert data server cues for marker and DE genes data tables
+#' Insert data server cues for seurat cluster markers, all 
 #'
-#' @rdname wrSVmarkersDE
-#' @export wrSVmarkersDE
+#' @param prefix file prefix
+#' @param markers.all TRUE/FALSE whether to create this tab
+#' @rdname wrSVmarkersAll
+#' @export wrSVmarkersAll
 #'
-wrSVmarkersAll <- function(prefix, markers.all, markers.top20, de.genes) {
+wrSVmarkersAll <- function(prefix, markers.all) {
   graphs <- ''
   if(markers.all == TRUE) {
     graphs <- graphs + glue::glue(
@@ -1758,6 +1760,13 @@ wrSVmarkersAll <- function(prefix, markers.all, markers.top20, de.genes) {
   return(graphs)
 }
 
+#' Insert data server cues for seurat cluster markers, top 20 
+#'
+#' @param prefix file prefix
+#' @param markers.top20 TRUE/FALSE whether to create this tab
+#' @rdname wrSVmarkersTop20
+#' @export wrSVmarkersTop20
+#'
 wrSVmarkersTop20 <- function(prefix, markers.top20) {
   graphs<-''
   if(markers.top20 == TRUE) {
@@ -1775,6 +1784,13 @@ wrSVmarkersTop20 <- function(prefix, markers.top20) {
   return(graphs)
 }
 
+#' Insert data server cues for differential expression genes table tab
+#'
+#' @param prefix file prefix
+#' @param de.genes TRUE/FALSE whether to create this tab
+#' @rdname wrSVdeGenes
+#' @export wrSVdeGenes
+#'
 wrSVdeGenes <- function(prefix, de.genes) {
   #graphs<-''
   if(de.genes == TRUE) {
@@ -1794,8 +1810,10 @@ wrSVdeGenes <- function(prefix, de.genes) {
   #return(graphs)
 }
 
-#' Insert data server cues for gene signature manipulate via AUCell
+#' Insert data server cues for gene signature manipulation via AUCell tab
 #'
+#' @param prefix file prefix
+#' @param gene.ranks TRUE/FALSE whether to create this tab
 #' @rdname wrSVgeneSig
 #' @export wrSVgeneSig
 #'
@@ -1968,6 +1986,13 @@ wrSVgeneSig <- function(prefix, gene.ranks) {
   #return(graphs)
 }
 
+#' Insert data server cues for differential gene expression volcano plot tab
+#'
+#' @param prefix file prefix
+#' @param volc.plot TRUE/FALSE whether to create this tab
+#' @rdname wrSVvolc
+#' @export wrSVvolc
+#'
 wrSVvolc <- function(prefix, volc.plot) {
   #graphs <- ''
   if(volc.plot == TRUE) {
@@ -3555,10 +3580,12 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '  \n')
 }
 
-#' Append markers and DE tabs to main block of ui.R
+#' Append markers, all to the main block of ui.R
 #'
-#' @rdname wrUImarkersDE
-#' @export wrUImarkersDE
+#' @param prefix file prefix
+#' @param markers.all TRUE/FALSE whether to include this tab
+#' @rdname wrUImarkersAll
+#' @export wrUImarkersAll
 #'
 
 wrUImarkersAll <- function(prefix, markers.all) {
@@ -3583,6 +3610,13 @@ wrUImarkersAll <- function(prefix, markers.all) {
   return(graphs)
 }
 
+#' Append markers, top 20 to main block of ui.R
+#'
+#' @param prefix file prefix
+#' @param markers.top20 TRUE/FALSE whether to include this tab
+#' @rdname wrUImarkersTop20
+#' @export wrUImarkersTop20
+#'
 wrUImarkersTop20 <- function(prefix, markers.top20) {
   graphs <- ''
   if(markers.top20 == TRUE) {
@@ -3605,6 +3639,13 @@ wrUImarkersTop20 <- function(prefix, markers.top20) {
   return(graphs)
 }
 
+#' Append differential gene expression to main block of ui.R
+#'
+#' @param prefix file prefix
+#' @param markers.top20 TRUE/FALSE whether to include this tab
+#' @rdname wrUIdeGenes
+#' @export wrUIdeGenes
+#'
 wrUIdeGenes <- function(prefix, de.genes) {
   graphs <- ''
   if(de.genes == TRUE) {
@@ -3631,6 +3672,8 @@ wrUIdeGenes <- function(prefix, de.genes) {
 
 #' Append gene signature page to ui.R
 #'
+#' @param prefix file prefix
+#' @param gene.ranks TRUE/FALSE whether to include this tab
 #' @rdname wrUIgeneSig
 #' @export wrUIgeneSig
 #'
@@ -3691,6 +3734,14 @@ wrUIgeneSig <- function(prefix, gene.ranks) {
   return(graphs)
 }
 
+
+#' Append gene differential gene expression volcano plot page to ui.R
+#'
+#' @param prefix file prefix
+#' @param gene.ranks TRUE/FALSE whether to include this tab
+#' @rdname wrUIvolc
+#' @export wrUIvolc
+#'
 wrUIvolc <- function(prefix, volc.plot) {
   graphs<-''
   if(volc.plot == TRUE) {
