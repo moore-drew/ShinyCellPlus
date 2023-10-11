@@ -23,7 +23,8 @@ makeShinyApp(
   markers.all = FALSE,
   markers.top20 = FALSE,
   de.genes = FALSE,
-  gene.ranks = FALSE
+  gene.ranks = FALSE,
+  volc.plot = FALSE
 )
 }
 \arguments{
