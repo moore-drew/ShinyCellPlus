@@ -20,34 +20,12 @@ wrLib <- function(lib) {
 #' @rdname wrSVload
 #' @export wrSVload
 #'
-wrSVload <- function(prefix, markers.all, markers.top20, de.genes) {
+wrSVload <- function(prefix) {
   glue::glue('{prefix}conf = readRDS("{prefix}conf.rds")\n',
              '{prefix}def  = readRDS("{prefix}def.rds")\n',
              '{prefix}gene = readRDS("{prefix}gene.rds")\n',
              '{prefix}meta = readRDS("{prefix}meta.rds")\n',
-             #TODO: use {prefix}conf$extra_tabs and get rid of passing those arguments every time?
-
-             #'markers.all = {markers.all}\n',
-             #'markers.top20 = {markers.top20}\n',
-             #'de.genes = {de.genes}\n',
-             #'if(markers.all==TRUE) {{\n',
-             #'  {prefix}m_all = readRDS("{prefix}m_all.rds")\n',
-             #'}}\n',
-             #'if(markers.top20==TRUE) {{\n',
-             #'  {prefix}m_t20 = readRDS("{prefix}m_t20.rds")\n',
-             #'}}\n',
-             #'if(de.genes==TRUE) {{\n',
-             #'  {prefix}de_genes = readRDS("{prefix}de_genes.rds")\n',
-             #'}}\n',
-
-             #TODO: set up a system where if something is initially flagged TRUE by the user.
-             # but the data isn't in seurat object or corresponding file is not found for
-             # whatever reason, make the page anyway and have it print out a corresponding
-             # error message to the user.  so: make it to so that makeShinyFiles.R doesn't
-             # change the TRUE flags in {prefix}config$extra_tabs, these lines here check if the
-             # corresponding files exist, if they don't then a message gets printed in the
-             # webpage they were wanting to make.
-             
+             '  \n',
              'if({prefix}conf$extra_tabs[1]==TRUE) {{ \n',
              '  if(file.exists(paste0(getwd(), "/{prefix}m_all.rds"))) {{ \n',
              '    {prefix}m_all = readRDS("{prefix}m_all.rds") \n',
@@ -825,24 +803,23 @@ wrSVmain <- function(prefix, subst = "") {
              '                         maxOptions = length({prefix}conf[is.na(fID)]$UI) + 3, \n',
              '                         create = TRUE, persist = TRUE, render = I(optCrt))) \n',
              ' \n',
-             '  #TODO: take these and add them to {prefix}conf for bryan\'s functions \n',
              '  {prefix}b3spl_choices = list() \n',
              '  i=1 #; j=1 \n',
              '  for(index in strsplit({prefix}conf$fID, "\\\\|")) {{ \n',
-             #'    # if(is.na(index)[1]) {{ \n',
-             #'    #   i<-i+1 \n',
-             #'    #   next \n',
-             #'    # }} \n',
-             #'    # else {{ \n',
-             #'    #   if(length(index) == 2) {{ \n', 
-             #'    #     {prefix}b3spl_choices[[j]]<-{prefix}conf$ID[[i]] \n',
-             #'    #     j<-j+1 \n',
-             #'    #   }} \n',
-             #'    #   else {{ \n',
-             #'    #     {prefix}conf$split[[i]] <- {prefix}conf$ID[[i]] \n',
-             #'    #   }} \n',
-             #'    #   i<-i+1 \n',
-             #'    # }} \n',
+             '    # if(is.na(index)[1]) {{ \n',
+             '    #   i<-i+1 \n',
+             '    #   next \n',
+             '    # }} \n',
+             '    # else {{ \n',
+             '    #   if(length(index) == 2) {{ \n', 
+             '    #     {prefix}b3spl_choices[[j]]<-{prefix}conf$ID[[i]] \n',
+             '    #     j<-j+1 \n',
+             '    #   }} \n',
+             '    #   else {{ \n',
+             '    #     {prefix}conf$split[[i]] <- {prefix}conf$ID[[i]] \n',
+             '    #   }} \n',
+             '    #   i<-i+1 \n',
+             '    # }} \n',
              '    if(length(index) == 2) {{ \n',
              '      {prefix}b3spl_choices[[i]]<-{prefix}conf$ID[[i]] \n',
              '      i<-i+1 \n',
@@ -1750,9 +1727,6 @@ wrSVmarkersAll <- function(prefix, markers.all) {
              '  output${prefix}m_all <- DT::renderDataTable( \n',
              '    {prefix}m_all, filter="top", options=list(autoWidth=TRUE) \n',
              '  ) \n',
-             #'  output${prefix}m_all <- renderDT({{ \n',
-             #'    datatable({prefix}m_all) \n',
-             #'  }}) \n',
              ' \n',
              ' \n'
     )
@@ -1774,9 +1748,6 @@ wrSVmarkersTop20 <- function(prefix, markers.top20) {
              '  output${prefix}m_t20 <- DT::renderDataTable( \n',
              '      {prefix}m_t20, filter="top" \n',
              '  ) \n',
-             #'  output${prefix}m_t20<- renderDT({{ \n',
-             #'    datatable({prefix}m_t20) \n',
-             #'  }}) \n',
              ' \n',
              ' \n'
     )
