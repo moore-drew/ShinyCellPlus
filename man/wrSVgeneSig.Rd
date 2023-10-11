@@ -2,10 +2,15 @@
 % Please edit documentation in R/writer.R
 \name{wrSVgeneSig}
 \alias{wrSVgeneSig}
-\title{Insert data server cues for gene signature manipulate via AUCell}
+\title{Insert data server cues for gene signature manipulation via AUCell tab}
 \usage{
 wrSVgeneSig(prefix, gene.ranks)
 }
+\arguments{
+\item{prefix}{file prefix}
+
+\item{gene.ranks}{TRUE/FALSE whether to create this tab}
+}
 \description{
-Insert data server cues for gene signature manipulate via AUCell
+Insert data server cues for gene signature manipulation via AUCell tab
 }

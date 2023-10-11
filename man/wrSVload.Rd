@@ -4,7 +4,7 @@
 \alias{wrSVload}
 \title{Write code for loading objects for server.R}
 \usage{
-wrSVload(prefix, markers.all, markers.top20, de.genes)
+wrSVload(prefix)
 }
 \arguments{
 \item{prefix}{file prefix}
