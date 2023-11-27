@@ -128,12 +128,12 @@ run_libra <- function(seurat_obj, cell_type_col, replicate_col, label_col,
   DefaultAssay(seurat_obj) <- "SCT"
   tmp <- seurat_obj
   
-  tmp@meta.data$cell_type <- tmp@meta.data[[opt$cell_type_col]]
-  tmp@meta.data$replicate <- tmp@meta.data[[opt$replicate_col]]
-  tmp@meta.data$label <- tmp@meta.data[[opt$label_col]]
+  tmp@meta.data$cell_type <- tmp@meta.data[[cell_type_col]]
+  tmp@meta.data$replicate <- tmp@meta.data[[replicate_col]]
+  tmp@meta.data$label <- tmp@meta.data[[label_col]]
   
-  DE_output <- run_de(tmp, de_family = opt$de_family, de_method = opt$de_method,
-                       de_type=opt$de_type)
+  DE_output <- run_de(tmp, de_family = de_family, de_method = de_method,
+                       de_type = de_type)
   
   return(DE_output) 
 }
@@ -178,8 +178,8 @@ for (i in rownames(genotype_combs)) {
   diff_exp <- run_libra(seurat_obj = sub_seurat,
                         cell_type_col = 'Cell',
                         replicate_col = 'Genotype',
-                        label_col = 'orig.ident',
-                        de_family = 'singlecell,
+                        label_col = 'Genotype',
+                        de_family = 'singlecell',
                         de_method = 'wilcox,
                         de_type = NULL)
 
