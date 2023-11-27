@@ -170,9 +170,9 @@ Now we will iterate through all defined combinations within 'genotype_combs', co
 
 ```
 for (i in rownames(genotype_combs)) {
-  title <- stringr::str_glue("{d[i,1]}vs{d[i,2]}")
+  title <- stringr::str_glue("{genotype_combs[i,1]}vs{genotype_combs[i,2]}")
   print(title)
-  sub_seurat <- subset(seurat, Genotype %in% c(d[i,1], d[i,2]))
+  sub_seurat <- subset(seurat, Genotype %in% c(genotype_combs[i,1], genotype_combs[i,2]))
  
   #libra function on sub_seurat
   diff_exp <- run_libra(seurat_obj = sub_seurat,
