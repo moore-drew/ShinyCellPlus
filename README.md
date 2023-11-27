@@ -53,6 +53,7 @@ seurat@misc$gene_ranks$aucell$all
 The associated commands can be ran after standard processing and the removal of doublets:
 
 ```
+# UPDATE THESE TO YOUR PERSONAL DATA DIRECTORIES AND FILES
 opt = list(seurat_file_path = "~/example/file/path/",
            seurat_save_name = "example_seurat.rds",
 	   seurat_output_path = "~/example/output/seurats/",
@@ -180,7 +181,7 @@ for (i in rownames(genotype_combs)) {
                         replicate_col = 'Genotype',
                         label_col = 'Genotype',
                         de_family = 'singlecell',
-                        de_method = 'wilcox,
+                        de_method = 'wilcox',
                         de_type = NULL)
 
   seurat <- add_libra_DE_table_to_seurat(seurat, diff_exp, title)
@@ -192,6 +193,7 @@ for (i in rownames(genotype_combs)) {
 With a prepared Seurat object, the final script for Shiny App creation is as follows:
 
 ```
+# UPDATE THESE TO YOUR PERSONAL DATA DIRECTORIES, FILES, AND SEURAT META.DATA COLUMNS
 opt = list(output_dir = "~/tutorial/output/directory/",
            seurat_object = "~/tutorial/seurat.rds",
            app_name = "tutorial_app_name",
