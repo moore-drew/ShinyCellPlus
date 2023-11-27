@@ -53,12 +53,10 @@ seurat@misc$gene_ranks$aucell$all
 The associated commands can be ran after standard processing and the removal of doublets:
 
 ```
-opt = list(seurat_file_path = "none",
-           project_name = "none",
-           seurat_save_name = "none",
-           output_path = "none",
-           integrated = "none",
-           umap_resolution = "none")
+opt = list(seurat_file_path = "~/example/file/path/",
+           seurat_save_name = "example_seurat.rds",
+	   seurat_output_path = "~/example/output/seurats/",
+	   output_path = "~/example/output/")
 
 print(t(t(unlist(opt))))
 
@@ -198,8 +196,7 @@ opt = list(output_dir = "~/tutorial/output/directory/",
            seurat_object = "~/tutorial/seurat.rds",
            app_name = "tutorial_app_name",
            scconf_defaults = c('Cell', 'seurat_clusters'),
-           seurat_columns = "default",
-           config_file = "/Users/mooredr/biocm/reference/shiny/shiny_config.json")
+           seurat_columns = "default")
 
 
 ##############################
