@@ -35,7 +35,7 @@ BiocManager::install("AUCell")
 
 In order to maintain Seurat meta.data column names and data types to go along with this tutorial, it is recommended to follow general R pipeline scripts, which are provided (https://github.com/BioinformaticsMUSC/biocm-scripts/blob/main/r_tools/interactive_scripts/, or https://github.com/BioinformaticsMUSC/biocm-scripts/blob/main/r_tools/auto_scripts/).
 
-### Presto Markers and AUCell Gene Ranks
+## Presto Markers and AUCell Gene Ranks
 
 Presto markers data needs to be stored as such:
 
@@ -109,7 +109,7 @@ seurat@misc[['gene_ranks']][['aucell']]$all <- AUCell_buildRankings(seurat@assay
 saveRDS(seurat, file=paste0(opt$seurat_output_path, '/03b_presto_markers_clusters_', opt$seurat_save_name))
 ```
 
-### Libra Differentially Expressed Genes
+## Libra Differentially Expressed Genes
 
 Preparing this can be a bit more complex, as depending on your data you can have varying amounts of differential expressions that you wish to compare.  The fields that you wish to differentiate may include two separate columns of meta.data.  For example, we will be using an example meta.data column 'Genotype', with set c("IC1", "IC2", "IC3", "IC4"):
 
@@ -188,7 +188,7 @@ for (i in rownames(genotype_combs)) {
 }
 ```
 
-### Creating the Shiny App from Prepared Seurat Object
+## Creating the Shiny App from Prepared Seurat Object
 
 With a prepared Seurat object, the final script for Shiny App creation is as follows:
 
@@ -241,7 +241,7 @@ makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
 
 The Shiny App should run upon completion of this script.
 
-### Deploying to shinyapps.io
+## Deploying to shinyapps.io
 
 ShinyCellPLUS is written in Shiny and can be deployed to Posit's web service, https://shinyapps.io.  After setting up an account with shinyapps.io, copy your 'name'/'token'/'secret' pair through the "Tokens" page; it should be structured like this:
 
