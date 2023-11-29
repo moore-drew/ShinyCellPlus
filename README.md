@@ -233,9 +233,43 @@ scConf <- modDefault(scConf, default1 = opt$scconf_defaults[1],
                      default2 = opt$scconf_defaults[2])
 
 
-makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name, 
+makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
+ 	     ### NEW, OPTIONAL PAGE ARGUMENTS; DEFAULT TO 'FALSE' ###
              markers.all=TRUE, markers.top20=TRUE, de.genes=TRUE,
              gene.ranks=TRUE, volc.plot=TRUE)
 ```
 
 The Shiny App should run upon completion of this script.
+
+### Deploying to shinyapps.io
+
+ShinyCellPLUS is written in Shiny and can be deployed to Posit's web service, https://shinyapps.io.  After setting up an account with shinyapps.io, copy your 'name'/'token'/'secret' pair through the "Tokens" page; it should be structured like this:
+
+```
+rsconnect::setAccountInfo(name='<ACCOUNT>',
+			  token='<TOKEN>',
+			  secret='<SECRET>')
+```
+
+Using this copied string, run the following script to deploy to shinyapps.io:
+
+```
+rsconnect::setAccountInfo(name='<ACCOUNT>',
+                          token='<TOKEN>',
+                          secret='<SECRET>')
+
+options(repos = BiocManager::repositories())
+
+rsconnect::deployApp("shinyApp/",
+                     appName = opt$app_name,
+                     account = '<ACCOUNT>', # REPLACE WITH YOUR ACCOUNT NAME
+                     server = 'shinyapps.io')
+```
+
+Note that there are size restrictions depending on your account's subscription to the service, including the size of the data uploaded to shinyapps.io as well as runtime memory.  You can adjust the memory allocated to the site for larger applications through the shinyapps.io deployed applications settings (which should be a commmon  need with the data ShinyCellPLUS is designed for).  You can also adjust the size of the data to be uploaded if you receive an error an associated error while deploying with:
+
+```
+options(rsconnect.max.bundle.size=5368709000)
+```
+
+Which should adjust a global RStudio option to a few kilobytes below the maximum allowed shinyapps.io upload size (5 GiB).  At least a 'Basic' subscription plan is required for this adjustment.
