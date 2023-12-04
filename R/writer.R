@@ -1717,7 +1717,9 @@ wrSVmarkersAll <- function(prefix, markers.all) {
             ' \n'
     )
   }
-  #return(graphs)
+  else {
+    return('')
+  }
 }
 
 #' Insert data server cues for seurat cluster markers, top 20 
@@ -1764,6 +1766,9 @@ wrSVdeGenes <- function(prefix, de.genes) {
             ' \n'
     )
   }
+  else {
+    return('')
+  }
   #return(graphs)
 }
 
@@ -1775,7 +1780,6 @@ wrSVdeGenes <- function(prefix, de.genes) {
 #' @export wrSVgeneSig
 #'
 wrSVgeneSig <- function(prefix, gene.ranks) {
-  
   #graphs <- ''
   if(gene.ranks == TRUE ) {
   #  graphs<-graphs + glue::glue( 
@@ -1942,6 +1946,9 @@ wrSVgeneSig <- function(prefix, gene.ranks) {
             ' \n'
     )
   }
+  else {
+    return('')
+  }
   #return(graphs)
 }
 
@@ -2061,6 +2068,9 @@ wrSVvolc <- function(prefix, volc.plot) {
             .trim=FALSE
   )
     #)
+  }
+  else {
+    return('')
   }
   #return(graphs)
 }
