@@ -111,6 +111,7 @@ saveRDS(seurat, file=paste0(opt$seurat_output_path, '/03b_presto_markers_cluster
 Alternatively to Presto, we can use the Seurat library's FindAllMarkers() to calculate all markers and top 20:
 
 ```
+library(tidyverse)
 seurat@misc[['markers']][['seurat']]$overall<-FindAllMarkers(seurat)
 
 auROC<-FindAllMarkers(seurat, test.use="roc")
