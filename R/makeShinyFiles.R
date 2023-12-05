@@ -444,11 +444,16 @@ makeShinyFiles <- function(
   if(class(obj)[1]=='Seurat') {
     if(markers.all==TRUE) { 
       sc1conf$extra_tabs[1] = TRUE
-      if(!is.null(obj@misc$markers$presto$all)){
+      if(!is.null(obj@misc$markers$presto$all)) {
         cat("creating .rds for all presto markers...\n")
         m_all <- obj@misc$markers$presto$all
         names(m_all)[names(m_all) == 'group'] <- 'cluster'
         #sc1conf$extra_tabs[1] = TRUE
+        saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
+      }
+      else if(!is.null(obj@misc$markers$seurat$overall)) {
+        cat("creating .rds for Seurat::FindAllMarkers() results...\n")
+        m_all <- obj@misc$markers$seurat$overall
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
       }
       else {
@@ -473,6 +478,11 @@ makeShinyFiles <- function(
         m_t20 <- m_t20[,sorted_colnames]
 
         #sc1conf$extra_tabs[2] = TRUE
+        saveRDS(m_t20, file=paste0(shiny.dir, "/", shiny.prefix, "m_t20.rds"))
+      }
+      else if(!is.null(obj@misc$markers$seurat$top_20)) {
+        cat("creating .rds for Seurat::FindAllMarkers() top 20 results...\n")
+        m_t20 <- obj@misc$markers$seurat$top_20
         saveRDS(m_t20, file=paste0(shiny.dir, "/", shiny.prefix, "m_t20.rds"))
       }
       else {
