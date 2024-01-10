@@ -1,13 +1,13 @@
-# ShinyCellPLUS
+# ShinyCellPlus
 Expansion of ShinyCell: https://github.com/SGDDNB/ShinyCell
 
 To install:
 
 ```
-devtools::install_github("bioinformaticsMUSC/ShinyCellPLUS")
+devtools::install_github("bioinformaticsMUSC/ShinyCellPlus")
 ```
 
-Multiple tabs of ShinyCellPLUS require specific data preparation with external libraries.  For full usage, please install Presto:
+Multiple tabs of ShinyCellPlus require specific data preparation with external libraries.  For full usage, please install Presto:
 
 ```
 devtools::install_github("immunogenomics/presto")
@@ -217,7 +217,7 @@ cat("\nLoading/installing libraries ...\n")
 suppressMessages(suppressWarnings({
   library(Seurat)
   library(devtools)
-  library(ShinyCellPLUS)
+  library(ShinyCellPlus)
   library(dplyr)
 }))
 
