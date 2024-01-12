@@ -112,10 +112,10 @@ Alternatively to Presto, we can use the Seurat library's FindAllMarkers() to cal
 
 ```
 library(tidyverse)
-seurat@misc[['markers']][['seurat']]$overall<-FindAllMarkers(seurat)
+seurat@misc[['markers']][['seurat']]$overall <- FindAllMarkers(seurat)
 
 auROC<-FindAllMarkers(seurat, test.use="roc")
-seurat@misc[['markers']][['seurat']]$top_20 <- auroc_check %>% group_by(.data$cluster) %>% top_n(n=20, wt=.data$myAUC) %>% mutate(rank=rank(-.data$myAUC, ties.method="random")) %>% ungroup() %>% select(.data$gene, .data$cluster, .data$rank) %>% spread(.data$cluster, .data$gene, fill=NA)
+seurat@misc[['markers']][['seurat']]$top_20 <- auROC %>% group_by(.data$cluster) %>% top_n(n=20, wt=.data$myAUC) %>% mutate(rank=rank(-.data$myAUC, ties.method="random")) %>% ungroup() %>% select(.data$gene, .data$cluster, .data$rank) %>% spread(.data$cluster, .data$gene, fill=NA)
 ```
 
 ## Libra Differentially Expressed Genes
