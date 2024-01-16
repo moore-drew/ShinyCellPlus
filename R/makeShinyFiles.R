@@ -451,9 +451,9 @@ makeShinyFiles <- function(
         #sc1conf$extra_tabs[1] = TRUE
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
       }
-      else if(!is.null(obj@misc$markers$seurat$overall)) {
+      else if(!is.null(obj@misc$markers$seurat$all)) {
         cat("creating .rds for Seurat::FindAllMarkers() results...\n")
-        m_all <- obj@misc$markers$seurat$overall
+        m_all <- obj@misc$markers$seurat$all
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
       }
       else {
