@@ -53,21 +53,11 @@ seurat@misc$gene_ranks$aucell$all
 The associated commands can be ran after standard processing and the removal of doublets:
 
 ```
-# UPDATE THESE TO YOUR PERSONAL DATA DIRECTORIES AND FILES
-opt = list(seurat_file_path = "~/example/file/path/",
-           seurat_save_name = "example_seurat.rds",
-	   seurat_output_path = "~/example/output/seurats/",
-	   output_path = "~/example/output/")
-
-print(t(t(unlist(opt))))
-
-if(!dir.exists(opt$output_path)){dir.create(opt$output_path,recursive = T)}
-setwd(opt$output_path)
-
-clviz_path = paste0(opt$output_path, '/viz_cluster')
-
-if(!dir.exists(clviz_path)){dir.create(clviz_path,recursive = T)}
-
+# UPDATE THESE TO YOUR PERSONAL DATA DIRECTORIES, FILES, AND SELECTED RESOLUTION (EX: "integrated_snn_res.0.6")
+opt = list(seurat_file_path = "~/example/file/path/seurat.rds",
+           seurat_save_name = "example_output_seurat.rds",
+	   seurat_output_path = "~/exmaple/file/output_path/",
+	   resolution = "integrated_snn_res.0.6")
 
 ##############################
 ### LOAD/INSTALL LIBRARIES ###
@@ -93,29 +83,25 @@ seurat <- readRDS(opt$seurat_file_path)
 ### RUN PRESTO ON CLUSTERS ###
 ##############################
 
+seurat$seurat_clusters <- seurat[[opt$resolution]]
+
 presto_markers <- wilcoxauc(seurat, "seurat_clusters")
+top <- top_markers(presto_markers, n = 20)
 
-write.csv(presto_markers, file = paste0(opt$output_path, '/presto_markers_clusters.csv'))
+seurat@misc$markers$presto$all <- presto_markers
+seurat@misc$markers$presto$top_20 <- top
 
-top <- top_markers(presto_markers, n = 10)
-
-write.csv(top, file = paste0(opt$output_path, '/top10_presto_markers_clusters.csv'))
-
-seurat@misc[['markers']][['presto']]$all <- presto_markers
-seurat@misc[['markers']][['presto']]$top_20 <- top
-
-seurat@misc[['gene_ranks']][['aucell']]$all <- AUCell_buildRankings(seurat@assays[['SCT']]@counts)
-
-saveRDS(seurat, file=paste0(opt$seurat_output_path, '/03b_presto_markers_clusters_', opt$seurat_save_name))
+seurat@misc$gene_ranks$aucell$all <- AUCell_buildRankings(seurat@assays$SCT@counts)
 ```
+
 Alternatively to Presto, we can use the Seurat library's FindAllMarkers() to calculate all markers and top 20:
 
 ```
 library(tidyverse)
-seurat@misc[['markers']][['seurat']]$all <- FindAllMarkers(seurat)
+seurat@misc$markers$seurat$all <- FindAllMarkers(seurat)
 
 auROC<-FindAllMarkers(seurat, test.use="roc")
-seurat@misc[['markers']][['seurat']]$top_20 <- auROC %>% group_by(.data$cluster) %>% top_n(n=20, wt=.data$myAUC) %>% mutate(rank=rank(-.data$myAUC, ties.method="random")) %>% ungroup() %>% select(.data$gene, .data$cluster, .data$rank) %>% spread(.data$cluster, .data$gene, fill=NA)
+seurat@misc$markers$seurat$top_20 <- auROC %>% group_by(.data$cluster) %>% top_n(n=20, wt=.data$myAUC) %>% mutate(rank=rank(-.data$myAUC, ties.method="random")) %>% ungroup() %>% select(.data$gene, .data$cluster, .data$rank) %>% spread(.data$cluster, .data$gene, fill=NA)
 ```
 
 ## Libra Differentially Expressed Genes
@@ -198,6 +184,12 @@ for (i in rownames(genotype_combs)) {
 ```
 
 ## Creating the Shiny App from Prepared Seurat Object
+
+IMPORTANT: It is recommended to save your Seurat object as this time, as sometimes interacting with local Shiny apps or closing them before their data is fully loaded and presented can cause RStudio to crash.
+
+```
+saveRDS(seurat, file=paste0(opt$seurat_output_path, '/SCP_prepped_', opt$seurat_save_name))
+```
 
 With a prepared Seurat object, the final script for Shiny App creation is as follows:
 
