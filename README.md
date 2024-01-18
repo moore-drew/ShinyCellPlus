@@ -267,7 +267,7 @@ rsconnect::deployApp("shinyApp/",
                      server = 'shinyapps.io')
 ```
 
-Note that there are size restrictions depending on your account's subscription to the service, including the size of the data uploaded to shinyapps.io as well as runtime memory.  You can adjust the memory allocated to the site for larger applications through the shinyapps.io deployed applications settings (which should be a commmon  need with the data ShinyCellPlus is designed for).  You can also adjust the size of the data to be uploaded if you receive an error an associated error while deploying with:
+Note that there are size restrictions depending on your account's subscription to the service, including the size of the data uploaded to shinyapps.io as well as runtime memory.  You can adjust the memory allocated to the site for larger applications through the shinyapps.io deployed applications settings (which should be a commmon  need with the data ShinyCellPlus is designed for).  You can also adjust the size of the data to be uploaded if you receive an associated error while deploying:
 
 ```
 options(rsconnect.max.bundle.size=5368709000)
