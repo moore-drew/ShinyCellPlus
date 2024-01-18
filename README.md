@@ -244,7 +244,7 @@ The Shiny App should run upon completion of this script.
 
 ## Deploying to shinyapps.io
 
-ShinyCellPLUS is written in Shiny and can be deployed to Posit's web service, https://shinyapps.io.  After setting up an account with shinyapps.io, copy your 'name'/'token'/'secret' pair through the "Tokens" page; it should be structured like this:
+ShinyCellPlus is written in Shiny and can be deployed to Posit's web service, https://shinyapps.io.  After setting up an account with shinyapps.io, copy your 'name'/'token'/'secret' pair through the "Tokens" page; it should be structured like this:
 
 ```
 rsconnect::setAccountInfo(name='<ACCOUNT>',
