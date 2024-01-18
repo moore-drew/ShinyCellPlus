@@ -3074,7 +3074,7 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              ' \n',
              ' ### b3 \n',
              ' tabPanel( \n',
-             '  HTML("Split-By: Gene Coexpression"), \n',
+             '  HTML("Split Dataset: Gene Coexpression"), \n',
              '  h4("Coexpression of two genes on reduced dimensions"), \n',
              '  "In this tab, users can visualise the coexpression of two genes ", \n',
              '  "on low-dimensional representations, while splitting between meta data", \n',
