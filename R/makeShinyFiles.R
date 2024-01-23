@@ -146,10 +146,10 @@ makeShinyFiles <- function(
   if(gene.mapping[1] == TRUE){
     if(sum(grepl("^ENSG000", gex.rownm)) >= sum(grepl("^ENMUSG000", gex.rownm))){
       tmp1 = fread(system.file("extdata", "geneMapHS.txt.gz", 
-                               package = "ShinyCellPLUS"))
+                               package = "ShinyCellPlus"))
     } else {
       tmp1 = fread(system.file("extdata", "geneMapMM.txt.gz", 
-                               package = "ShinyCellPLUS"))
+                               package = "ShinyCellPlus"))
     }
     gene.mapping = tmp1$geneName
     names(gene.mapping) = tmp1$geneID
