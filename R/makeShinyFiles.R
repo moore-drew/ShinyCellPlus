@@ -44,7 +44,18 @@
 #'   reductions. Default is to use UMAP if not TSNE embeddings
 #' @param chunkSize number of genes written to h5file at any one time. Lower 
 #'   this number to reduce memory consumption. Should not be less than 10
-#'
+#' @param markers.all boolean flag as to whether to create the 
+#'   "Cluster Markers, All" tab and prepare associated Seurat data
+#' @param markers.top20 boolean flag as to whether to create the
+#'   "Cluster Markers, Top 20" tab and prepare associated Seurat data
+#' @param de.genes boolean flag as to whether to create the "Diff. Exp. Genes"
+#'   tab and prepre associated Seurat data
+#' @param gene.ranks boolean flag as to whether to create the "Gene Signature"
+#'   tab and prepare the associated Seurat data
+#' @param volc.plot boolean flag as to whether to create the 
+#'   "Diff. Gene Exp., Volcano" tab and prepare associated Seurat data
+#' @param gene.ont boolean flag as to whether to create the "ToppGene Ontology"
+#'   tab and prepate the associated Seurat data
 #' @return data files required for shiny app
 #'
 #' @author John F. Ouyang
@@ -65,21 +76,32 @@ makeShinyFiles <- function(
   obj, scConf, gex.assay = NA, gex.slot = c("data", "scale.data", "counts"), 
   gene.mapping = FALSE, shiny.prefix = "sc1", shiny.dir = "shinyApp/",
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, chunkSize = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE){
+  default.dimred = NA, chunkSize = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE){
   ### Preprocessing and checks
   # Generate defaults for gex.assay / gex.slot
   if(class(obj)[1] == "Seurat"){
     # Seurat Object
     if(is.na(gex.assay[1])){gex.assay = "RNA"}
-    gex.matdim = dim(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
-    gex.rownm = rownames(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
-    gex.colnm = colnames(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
+
+    # alternative to these conditionals is to use GetAssayData(obj, assay, slot), 
+    # but the slot parameter would still need to be conditionally chosen in some way
+    # to either "data" or "counts"
+    if(obj@version >= "5.0.0") {
+      gex.matdim = dim(LayerData(obj, assay=gex.assay[1], layer=gex.slot[3]))
+      gex.rownm = rownames(LayerData(obj, assay=gex.assay[1], layer=gex.slot[3]))
+      gex.colnm = colnames(LayerData(obj, assay=gex.assay[1], layer=gex.slot[3]))
+    }
+    else {
+      gex.matdim = dim(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
+      gex.rownm = rownames(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
+      gex.colnm = colnames(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
+    }
     # defGenes = obj@assays[[gex.assay[1]]]@var.features[1:10]
     defGenes = Seurat::VariableFeatures(obj)[1:10]
     if(is.na(defGenes[1])){
       warning(paste0("Variable genes for seurat object not found! Have you ",
                      "ran `FindVariableFeatures` or `SCTransform`?"))
-      defGenes = gex.rownm[1:10]
+        defGenes = gex.rownm[1:10]
     }
     sc1meta = data.table(sampleID = rownames(obj@meta.data), obj@meta.data)
     
@@ -310,13 +332,22 @@ makeShinyFiles <- function(
   } 
   if(class(obj)[1] == "Seurat"){
     # Seurat Object
-    for(i in 1:floor((gex.matdim[1]-8)/chk)){
-      sc1gexpr.grp.data[((i-1)*chk+1):(i*chk), ] <- as.matrix(
-        slot(obj@assays[[gex.assay[1]]], gex.slot[1])[((i-1)*chk+1):(i*chk),])
+    if(obj@version >= "5.0.0") {
+      for(i in 1:floor((gex.matdim[1]-8)/chk)){
+        sc1gexpr.grp.data[((i-1)*chk+1):(i*chk), ] <- as.matrix(
+          LayerData(obj, assay=gex.assay[1], layer=gex.slot[3])[((i-1)*chk+1):(i*chk),])
+      }
+      sc1gexpr.grp.data[(i*chk+1):gex.matdim[1], ] <- as.matrix(
+        LayerData(obj, assay=gex.assay[1], layer=gex.slot[3])[(i*chk+1):gex.matdim[1],])
     }
-    sc1gexpr.grp.data[(i*chk+1):gex.matdim[1], ] <- as.matrix(
-      slot(obj@assays[[gex.assay[1]]], gex.slot[1])[(i*chk+1):gex.matdim[1],])
-    
+    else {
+      for(i in 1:floor((gex.matdim[1]-8)/chk)){
+        sc1gexpr.grp.data[((i-1)*chk+1):(i*chk), ] <- as.matrix(
+          slot(obj@assays[[gex.assay[1]]], gex.slot[1])[((i-1)*chk+1):(i*chk),])
+      }
+      sc1gexpr.grp.data[(i*chk+1):gex.matdim[1], ] <- as.matrix(
+        slot(obj@assays[[gex.assay[1]]], gex.slot[1])[(i*chk+1):gex.matdim[1],])
+    }
   } else if (class(obj)[1] == "SingleCellExperiment"){
     # SCE Object
     for(i in 1:floor((gex.matdim[1]-8)/chk)){
@@ -430,7 +461,7 @@ makeShinyFiles <- function(
   sc1conf = sc1conf[, -c("fUI", "default"), with = FALSE]
   
   
-  
+
   ### Saving objects
   #saveRDS(sc1conf, file = paste0(shiny.dir, "/", shiny.prefix, "conf.rds"))
   saveRDS(sc1meta, file = paste0(shiny.dir, "/", shiny.prefix, "meta.rds"))
@@ -457,7 +488,7 @@ makeShinyFiles <- function(
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
       }
       else {
-        cat("Warning: 'markers.all' not found in Seurat (structure expected: seurat@misc$markers$presto$all);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n")
+        cat("Warning: 'markers.all' not found in Seurat (structure expected: seurat@misc$markers$presto$all);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[1] = FALSE
       }
     }
@@ -507,6 +538,7 @@ makeShinyFiles <- function(
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes.rds"))
       }
       else {
+        sc1conf$DEs[1] <- c("ERROR|ERROR")
         cat("Warning: 'de.genes' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[3] = FALSE
       }
@@ -526,30 +558,8 @@ makeShinyFiles <- function(
       }
     }
 
-     if(volc.plot==TRUE) {
+    if(volc.plot==TRUE) {
       sc1conf$extra_tabs[5] = TRUE
-
-      # # TODO: figure out how to deal with multiple DE_genes methods
-      # # (will have to change the 'renames' accordingly)
-      # if(!is.null(obj@misc$DE_genes)) {
-      #   #methods <- names(obj@misc$DE_genes)
-      #   #de_list <- names(obj@misc$DE_genes[[methods]])
-
-      #   # TODO: support for methods other than Libra
-      #   de_list <- names(obj@misc$DE_genes$libra)
-
-      #   #for(method in c(1:length(methods))) {
-      #     for(de in c(1:length(de_list))) { # for(de in de_list) ?
-      #       #de_genes <- obj@misc$DE_genes[[method]][[de]]
-      #       de_genes <- obj@misc$DE_genes$libra[[de_list[de]]] # $libra[[de]] ?
-      #       de_genes <- rename(de_genes, genes = gene) 
-      #       de_genes <- rename(de_genes, log2FoldChange = avg_logFC) 
-      #       de_genes <- rename(de_genes, pvalue = p_val_adj)
-      #       saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "DEG_", de_list[de], "_ggvolc.rds"))
-      #     }
-      #   #}
-      # }
-
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         cat("creating .rds of differentially expressed genes formatted for ggvolc...\n")
         # check to see if has correct column names?
@@ -568,8 +578,23 @@ makeShinyFiles <- function(
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
       }
       else {
+        sc1conf$DEs[2] <- c("ERROR|ERROR")
+        sc1conf$DEs[3] <- c("ERROR|ERROR")
         cat("Warning: 'volc.plot' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[5] = FALSE
+      }
+    }
+
+    if(gene.ont==TRUE) {
+      sc1conf$extra_tabs[6] = TRUE
+      if(!is.null(obj@misc$DE_genes$libra$overall)) {
+        cat("creating .rds for all ToppGene ontology...\n")
+        de_genes <- obj@misc$DE_genes$libra$overall
+        gene_ont <- toppFun(de_genes, cluster_col="cell_type", num_genes=20)
+        saveRDS(gene_ont, file=paste0(shiny.dir, "/", shiny.prefix, "gene_ont.rds"))
+      }
+      else {
+        cat("Warning: 'de.genes' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab ('ToppGene Ontology') will be created but with an error message instead of what is expected...\n\n")
       }
     }
   }

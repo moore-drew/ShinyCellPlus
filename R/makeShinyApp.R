@@ -44,7 +44,18 @@
 #'   show in bubbleplot / heatmap
 #' @param default.dimred character vector specifying the two default dimension 
 #'   reductions. Default is to use UMAP if not TSNE embeddings
-#'
+#' @param markers.all boolean flag as to whether to create the 
+#'   "Cluster Markers, All" tab and prepare associated Seurat data
+#' @param markers.top20 boolean flag as to whether to create the
+#'   "Cluster Markers, Top 20" tab and prepare associated Seurat data
+#' @param de.genes boolean flag as to whether to create the "Diff. Exp. Genes"
+#'   tab and prepre associated Seurat data
+#' @param gene.ranks boolean flag as to whether to create the "Gene Signature"
+#'   tab and prepare the associated Seurat data
+#' @param volc.plot boolean flag as to whether to create the 
+#'   "Diff. Gene Exp., Volcano" tab and prepare associated Seurat data
+#' @param gene.ont boolean flag as to whether to create the "ToppGene Ontology"
+#'   tab and prepate the associated Seurat data
 #' @return directory containing shiny app
 #'
 #' @author John F. Ouyang
@@ -77,7 +88,7 @@ makeShinyApp <- function(
   shiny.title = "scRNA-seq shiny app", shiny.footnotes = "",
   shiny.dir = "shinyApp/", enableSubset = TRUE, defPtSiz = 1.25, ganalytics=NA,
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE){
+  default.dimred = NA, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE){
   
   # Checks are performed in respective functions
   # Wrapper for two main functions
@@ -85,13 +96,13 @@ makeShinyApp <- function(
   makeShinyFiles(obj = obj, scConf = scConf, 
                  gex.assay = gex.assay[1], gex.slot = gex.slot[1], 
                  gene.mapping = gene.mapping, 
-                 shiny.prefix = "sc1", shiny.dir = shiny.dir, markers.all = markers.all, markers.top20 = markers.top20, 
-                 de.genes = de.genes, gene.ranks = gene.ranks, volc.plot = volc.plot, default.gene1, default.gene2, default.multigene, default.dimred)
+                 shiny.prefix = "sc1", shiny.dir = shiny.dir, default.gene1, default.gene2, default.multigene, default.dimred, markers.all = markers.all, markers.top20 = markers.top20, 
+                 de.genes = de.genes, gene.ranks = gene.ranks, volc.plot = volc.plot, gene.ont = gene.ont)
   makeShinyCodes(shiny.title = shiny.title, shiny.footnotes = shiny.footnotes,
                  shiny.prefix = "sc1", shiny.dir = shiny.dir, 
                  enableSubset = enableSubset, defPtSiz = defPtSiz,
                  ganalytics = ganalytics, markers.all = markers.all, markers.top20 = markers.top20, de.genes = de.genes,
-                 gene.ranks = gene.ranks, volc.plot = volc.plot)
+                 gene.ranks = gene.ranks, volc.plot = volc.plot, gene.ont = gene.ont)
 
 }
 

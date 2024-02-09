@@ -66,6 +66,14 @@ wrSVload <- function(prefix) {
              '    {prefix}de_genes_ggvolc = matrix(c("ERROR")) \n',
              '  }} \n',
              '}} \n',
+             'if({prefix}conf$extra_tabs[6]==TRUE) {{ \n',
+             '  if(file.exists(paste0(getwd(), "/{prefix}gene_ont.rds"))) {{ \n',
+             '    {prefix}gene_ont = readRDS("{prefix}gene_ont.rds") \n',
+             '  }} \n',
+             '  else {{ \n',
+             '    {prefix}gene_ont = matrix(c("ERROR")) \n',
+             '  }} \n',
+             '}} \n',
              '\n\n\n\n')
 }
 
@@ -1694,6 +1702,7 @@ wrSVmain <- function(prefix, subst = "") {
 #'
 #' @param prefix file prefix
 #' @param markers.all TRUE/FALSE whether to create this tab
+#'
 #' @rdname wrSVmarkersAll
 #' @export wrSVmarkersAll
 #'
@@ -1702,6 +1711,7 @@ wrSVmarkersAll <- function(prefix, markers.all) {
   if(markers.all == TRUE) {
     #graphs <- graphs + glue::glue(
     glue::glue(
+            '   # markers.all \n',
             '   observeEvent(input${prefix}m_all_select, {{ \n',
             '     #print(input${prefix}m_all_select) \n',
             '   }}) \n',
@@ -1714,6 +1724,11 @@ wrSVmarkersAll <- function(prefix, markers.all) {
             #'    {prefix}m_all, filter="top", options=list(autoWidth=TRUE) \n',
             #'  ) \n',
             #' \n',
+            '  #output$sc1m_all_select.ui <- renderUI ({{ \n',
+            '  #  choices <- strsplit({prefix}conf[grp==TRUE][UI==input${prefix}_meta_select]$fID, "\\\\|")[[1]] \n',
+            '  #  print(choices) \n',
+            '  #  selectInput("{prefix}m_all_select", "Select cell:", choices) \n',
+            '  #}}) \n',
             ' \n'
     )
   }
@@ -1733,6 +1748,7 @@ wrSVmarkersTop20 <- function(prefix, markers.top20) {
   graphs<-''
   if(markers.top20 == TRUE) {
     graphs <- graphs + glue::glue(
+             '  # markers.top20 \n',
              '  output${prefix}m_t20 <- DT::renderDataTable( \n',
              '      {prefix}m_t20, filter="top" \n',
              '  ) \n',
@@ -1755,6 +1771,7 @@ wrSVdeGenes <- function(prefix, de.genes) {
   if(de.genes == TRUE) {
     #graphs <- graphs + glue::glue(
     glue::glue(
+            '   # de.genes \n',
             '   observeEvent(input${prefix}de_genes_select, {{ \n',
             '     #print(input${prefix}de_genes_select) \n',
             '   }}) \n',
@@ -1763,7 +1780,7 @@ wrSVdeGenes <- function(prefix, de.genes) {
             '     subset({prefix}de_genes, de_name == input${prefix}de_genes_select), filter="top" \n',
             '   ) \n',
             ' \n',
-            ' \n'
+            ' \n',
     )
   }
   else {
@@ -1785,6 +1802,7 @@ wrSVgeneSig <- function(prefix, gene.ranks) {
   #  graphs<-graphs + glue::glue( 
   glue::glue(
             ' \n',
+            ' # gene sig \n',
             ' output$gsig_subset.ui <- renderUI({{ \n',
             '   subset = strsplit({prefix}conf[UI == input$gsig_subset]$fID, "\\\\|")[[1]] \n',
             '   checkboxGroupInput("gsig_subset2", "Select which cells to show", inline = TRUE, \n',
@@ -1964,7 +1982,7 @@ wrSVvolc <- function(prefix, volc.plot) {
   if(volc.plot == TRUE) {
   #  graphs <- graphs + glue::glue(
   glue::glue(
-            '  #### volcano plot \n',
+            '  #  diff exp volcano plot \n',
             '  scVolc <- function(conf, genes, de_selection, genes_selection, de_subset_col, de_subset, fold_change, p_value, subset_toggle, \n',
             '                     top10_toggle, xlim_down, xlim_up, ylim, down_col, up_col, not_sig_color) {{ \n',
             '    \n',
@@ -2073,6 +2091,121 @@ wrSVvolc <- function(prefix, volc.plot) {
     return('')
   }
   #return(graphs)
+}
+
+#' Insert data server cues for ToppGene ontology tab
+#'
+#' @param prefix file prefix
+#' @param gene.ont TRUE/FALSE whether to create this tab
+#' @rdname wrSVgeneOnt
+#' @export wrSVgeneOnt
+#'
+wrSVgeneOnt <- function(prefix, gene.ont) {
+  if(gene.ont == TRUE) {
+    glue::glue(
+              '  \n',
+              '  # ToppGene ontology \n',
+              '  scTopp <- function(gene_ont, plot_select, category_select, balloons_select, clusters_select, text_size) {{ \n',
+              '    if(plot_select == "Balloon plot") {{ \n', 
+              '      toppBalloon(gene_ont, categories=category_select, balloons=balloons_select, x_axis_text_size=text_size) \n',
+              '    }} \n', 
+              '    else {{ \n', 
+              '      p <- toppPlot(gene_ont, categories=category_select, clusters=clusters_select, y_axis_text_size=text_size) \n',
+              '      \n',
+              '      if(length(clusters_select) > 1) {{ \n', 
+              '        gg <- ggplot() \n',
+              '        first<-TRUE \n',
+              '        \n',
+              '        for(i in clusters_select) {{ \n', 
+              '          if(first == TRUE) {{ \n', 
+              '            gg <- p[[category_select]][[i]] \n',
+              '            first <- FALSE \n',
+              '            next \n',
+              '          }} \n', 
+              '          gg <- gg + p[[category_select]][[i]] \n',
+              '        }} \n',
+              '        \n',
+              '        gg \n',
+              '      }} \n',
+              '      else {{ \n',
+              '        p \n', 
+              '      }} \n',
+              '    }} \n',
+              '  }} \n',
+              '  \n',
+              '  # plotSizeFixer <- function(l_or_w) {{ \n',
+              '  #   if(str_sub(l_or_w, start=length(l_or_w)-3) == "px") {{ \n',
+              '  #     l_or_w <- strsplit(l_or_w, split="px")[[1]] \n',
+              '  #   }} \n',
+              '  #   else if(is.na(as.integer(l_or_w))) {{ \n',
+              '  #     return(800) \n',
+              '  #   }} \n',
+              '  #   return(as.integer(l_or_w)) \n',
+              '  # }} \n',
+              '  \n',
+              '  output$gont_cat_select.ui <- renderUI({{ \n',
+              '    cats = get_ToppCats() \n',
+              '    selectInput("gont_cat_select2", "Select category:", choices = cats) \n',
+              '  }}) \n', 
+              '  \n', 
+              '  output$gont_cluster_vals.ui <- renderUI({{ \n',
+              '    clusters = unique({prefix}gene_ont$Cluster) \n',
+              '    checkboxGroupInput("gont_cluster_vals2", "Select clusters:", inline = TRUE, \n',
+              '                       choices = clusters, selected = clusters[1]) \n',
+              '  }}) \n',
+              '  \n',
+              '  observeEvent(input$gont_cluster_vals_sel_all, {{ \n', 
+              '    clusters = unique({prefix}gene_ont$Cluster) \n',
+              '    updateCheckboxGroupInput(session, inputId = "gont_cluster_vals2", label = "Select which subsets to show", \n',
+              '                             choices = clusters, selected = clusters, inline = TRUE) \n',
+              '  }}) \n',
+              '  \n',
+              '  observeEvent(input$gont_cluster_vals_desel_all, {{ \n', 
+              '    clusters = unique({prefix}gene_ont$Cluster) \n',
+              '    updateCheckboxGroupInput(session, inputId = "gont_cluster_vals2", label = "Select which subsets to show", \n',
+              '                             choices = clusters, selected = NULL, inline = TRUE) \n',
+              '  }}) \n',
+              '  \n', 
+              '  output$gont_plot.ui <- renderUI({{ \n',
+              '    plotOutput("gont_plot", width=input$gont_plot_x, height=input$gont_plot_y) \n',
+              '  }}) \n',
+              '  \n',
+              '  output$gont_plot <- renderPlot({{ \n', 
+              '    if({prefix}gene_ont[1,1] == "ERROR") {{ \n', 
+              '      return(ggplot() + labs(title="ERROR: data file \'{prefix}gene_ont.rds\' not found, cannot create plots!")) \n',
+              '    }} \n', 
+              '    scTopp({prefix}gene_ont, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
+              '  }}) \n',
+              '  \n',      
+              '  output$gont_download.pdf <- downloadHandler( \n',
+              '    filename = function() {{ \n', 
+              '      paste0("{prefix}_gene_ont_", input$gont_cat_select2, "_dot_plot_", Sys.Date(), ".pdf") \n',
+              '    }}, \n', 
+              '    content = function(file) {{ ggsave( \n',
+              '      #file, device = "pdf", height = plotSizeFixer(input$gont_plot_y), width = 1.25*plotSizeFixer(input$gont_plot_x), scale=0.25, units="mm", useDingbats = FALSE, \n',
+              '      file, device = "pdf", height = input$gont_download_height, width = input$gont_download_width, useDingbats = FALSE, \n',
+              '      plot = scTopp({prefix}gene_ont, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
+              '    ) \n', 
+              '    }} \n', 
+              '  ) \n', 
+              '  \n',
+              '  output$gont_download.png <- downloadHandler( \n',
+              '    filename = function() {{ \n', 
+              '      paste0("{prefix}_gene_ont_", input$gont_cat_select2, "_dot_plot_", Sys.Date(), ".png") \n',
+              '    }}, \n', 
+              '    content = function(file) {{ ggsave( \n',
+              '      #file, device = "png", height = plotSizeFixer(input$gont_plot_y), width = 1.25*plotSizeFixer(input$gont_plot_x), scale=0.25, units="mm", \n',
+              '      file, device = "png", height = input$gont_download_height, width = input$gont_download_width, \n',
+              '      plot = scTopp({prefix}gene_ont, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
+              '    ) \n', 
+              '    }} \n', 
+              '  ) \n', 
+              .trim=FALSE
+    )
+  }
+  else {
+    return('')
+  }
 }
 
 #' Write code for final portion of server.R
@@ -3332,7 +3465,9 @@ wrUImarkersAll <- function(prefix, markers.all) {
         '    h4("This page is meant to display associations between genetic markers and Seurat data clusters through an embedded spreadsheet."), \n',
         '    br(),br(), \n',
         '    fluidRow( \n',
-        '      selectInput("{prefix}m_all_select", "Select cell:", choices=strsplit({prefix}conf[grp==TRUE][UI=="Cell"]$fID, "\\\\|")[[1]]), # would you ever want to look at all? \n',
+        '      #selectInput("{prefix}m_meta_select", "Select meta:", choices=list({prefix}def$meta1, {prefix}def$meta1)), \n',
+        '      selectInput("{prefix}m_all_select", "Select cell:", choices=strsplit({prefix}conf[grp==TRUE][UI=={prefix}def$meta1]$fID, "\\\\|")[[1]]), # would you ever want to look at all? \n',
+        '      #uiOutput("{prefix}m_all_select.ui"), \n',
         '      column(12, \n',
         '        DT::dataTableOutput("{prefix}m_all.ui") \n',
         '      ) \n',
@@ -3427,8 +3562,8 @@ wrUIgeneSig <- function(prefix, gene.ranks) {
       '      column(3, style="border-right: 2px solid black", \n',
       '        textAreaInput("gsig_list", "List of genes", value=paste0({prefix}def$genes, collapse = "\\n"), height="200px"), \n', #func to get correct genes??
       '        selectInput("gsig_group", "Group by:", choices={prefix}conf[grp==TRUE]$UI, selected={prefix}def$grp1), \n', #are these the correct groups?
-      '        actionButton("gsig_generate_plot", "Generate / Update plot", class = "btn-success"), \n',
-      '        br(),br(), \n',
+      '        #actionButton("gsig_generate_plot", "Generate / Update plot", class = "btn-success"), \n',
+      '        #br(),br(), \n',
       '        actionButton("gsig_subset_toggle", "Toggle to subset cells"), \n', #what kind of / how to get subsets? should be range of whatever group youre trying to subset
       '        conditionalPanel("input.gsig_subset_toggle % 2 == 1", \n',
       '                         selectInput("gsig_subset", "Cell information to subset:", choices={prefix}conf[grp==TRUE]$UI, selected={prefix}def$grp1), \n', #func to get correct groups
@@ -3531,6 +3666,58 @@ wrUIvolc <- function(prefix, volc.plot) {
   return(graphs)
 }
 
+#' Append ToppGene ontology page to ui.R
+#'
+#' @param prefix file prefix
+#' @param gene.ont TRUE/FALSE whether to include this tab
+#' @rdname wrUIgeneOnt
+#' @export wrUIgeneOnt
+#'
+wrUIgeneOnt <- function(prefix, gene.ont) {
+  graphs <-''
+  if(gene.ont == TRUE) {
+    graphs <- graphs + glue::glue(
+       '  , \n',   
+       '  \n',
+       '  tabPanel( \n',
+       '    HTML("ToppGene Ontology"), \n',
+       '    h4("Plot ontology data retrieved from ToppGene database (would need to re-run ShinyCellPlus scripts to requery ToppGene)"), \n',
+       '    br(),br(), \n',
+       '    fluidRow( \n',
+       '      column(2, \n',
+       '        uiOutput("gont_cat_select.ui"), \n',  
+       '        selectInput("gont_plot_select", "Select plot method:", choices=c("Balloon plot", "Cluster dotplot")), \n',
+       '        conditionalPanel("input.gont_plot_select == \'Balloon plot\'", \n',
+       '                         sliderInput("gont_balloon_val", "Number of categories:", 1, 6, 1, step=1) \n',
+       '        ), \n',
+       '        conditionalPanel("input.gont_plot_select == \'Cluster dotplot\'", \n',
+       '                         uiOutput("gont_cluster_vals.ui"), \n',
+       '                         actionButton("gont_cluster_vals_sel_all", "Select all groups"), \n',
+       '                         actionButton("gont_cluster_vals_desel_all", "Deselect all groups") \n',
+       '        ), \n',
+       '        textInput("gont_plot_y", "Plot height: ", value = "800", placeholder = "800"), \n',
+       '        textInput("gont_plot_x", "Plot width: ", value = "1200", placeholder = "1200"), \n',
+       '        sliderInput("gont_text_size", "Text size: ", 1, 15, 6, step=1), \n',
+       '        downloadButton("gont_download.pdf", "Download PDF"), \n',
+       '        downloadButton("gont_download.png", "Download PNG"), \n',
+       '        br(), \n',
+       '        fillRow( \n',
+       '          numericInput("gont_download_height", "PDF / PNG height:", value=6, min=4, max=35, step=0.5, width="138px"), \n',
+       '          numericInput("gont_download_width", "PDF / PNG width:", value=14, min=4, max=35, step=0.5, width="140px"), \n',
+       '          width="75%" \n',
+       '        ) \n', 
+       '      ), \n',
+       '      column(10, \n',
+       '        uiOutput("gont_plot.ui") \n',
+       '      ) \n',
+       '    ) \n',
+       '  ) \n',
+    )
+  }
+
+  return(graphs)
+}
+
 #' Write code for final portion of ui.R
 #'
 #' @param footnote shiny app footnote
@@ -3559,9 +3746,7 @@ wrUIend <- function(footnote) {
              '   \n',
              'br(), \n',
              'p({f0}), \n',
-             #'p(em("This webpage was made using "), a("ShinyCell", \n', 
-             #'  href = "https://github.com/SGDDNB/ShinyCell",target="_blank")), \n',
-             'p(em("This webpage was made using "), a("ShinyCellPLUS", \n',
+             'p(em("This webpage was made using "), a("ShinyCellPlus", \n',
              '   href = "https://github.com/BioinformaticsMUSC/ShinyCellPlus", target="_blank"), \n',
              '  em(", a fork of "), a("ShinyCell", href = "https://github.com/SGDDNB/ShinyCell", target="_blank")), \n',
              'br(),br(),br(),br(),br() \n',
