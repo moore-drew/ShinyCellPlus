@@ -18,6 +18,18 @@
 #' @param defPtSiz specify default point size for single cells. For example, a 
 #'   smaller size can be used if you have many cells in your dataset
 #' @param ganalytics Google analytics tracking ID (e.g. "UA-123456789-0")
+#' @param markers.all boolean flag as to whether to create the 
+#'   "Cluster Markers, All" tab and prepare associated Seurat data
+#' @param markers.top20 boolean flag as to whether to create the
+#'   "Cluster Markers, Top 20" tab and prepare associated Seurat data
+#' @param de.genes boolean flag as to whether to create the "Diff. Exp. Genes"
+#'   tab and prepre associated Seurat data
+#' @param gene.ranks boolean flag as to whether to create the "Gene Signature"
+#'   tab and prepare the associated Seurat data
+#' @param volc.plot boolean flag as to whether to create the 
+#'   "Diff. Gene Exp., Volcano" tab and prepare associated Seurat data
+#' @param gene.ont boolean flag as to whether to create the "ToppGene Ontology"
+#'   tab and prepate the associated Seurat data
 #'
 #' @return server.R and ui.R required for shiny app
 #'
@@ -43,7 +55,7 @@
 makeShinyCodes <- function(shiny.title, shiny.footnotes,
                            shiny.prefix, shiny.dir, 
                            enableSubset = TRUE, defPtSiz = 1.25,
-                           ganalytics = NA, markers.all = FALSE, markers.top20 = FALSE, de.genes = FALSE, gene.ranks=FALSE, volc.plot=FALSE){
+                           ganalytics = NA, markers.all = FALSE, markers.top20 = FALSE, de.genes = FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE){
   subst = "#"
   if(enableSubset){subst = ""}
   defPtSiz = as.character(defPtSiz)
@@ -53,7 +65,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
       c("shiny","shinyhelper","data.table","Matrix","DT","magrittr","ggplot2",
-        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell","rbokeh", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')")), file = fname)
+        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell","rbokeh", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')", "scToppR", "patchwork", "stringr, include.only = c('str_sub')")), file = fname)
     readr::write_file(wrSVload(shiny.prefix), append = TRUE, file = fname)
     readr::write_file(wrSVfix(), append = TRUE, file = fname)
     readr::write_file(wrSVmain(shiny.prefix, subst), append = TRUE, file = fname)
@@ -62,6 +74,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     readr::write_file(wrSVdeGenes(shiny.prefix, de.genes), append = TRUE, file = fname)
     readr::write_file(wrSVgeneSig(shiny.prefix, gene.ranks), append = TRUE, file = fname)
     readr::write_file(wrSVvolc(shiny.prefix, volc.plot), append = TRUE, file = fname)
+    readr::write_file(wrSVgeneOnt(shiny.prefix, gene.ont), append = TRUE, file = fname)
     readr::write_file(wrSVend(), append = TRUE, file = fname)
     
     
@@ -77,6 +90,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     readr::write_file(wrUIdeGenes(shiny.prefix, de.genes), append = TRUE, file = fname)
     readr::write_file(wrUIgeneSig(shiny.prefix, gene.ranks), append = TRUE, file = fname)
     readr::write_file(wrUIvolc(shiny.prefix, volc.plot), append = TRUE, file = fname)
+    readr::write_file(wrUIgeneOnt(shiny.prefix, gene.ont), append = TRUE, file = fname)
     readr::write_file(glue::glue(', \n'), append = TRUE, file = fname)
     readr::write_file(wrUIend(shiny.footnotes), append = TRUE, file = fname)
     
@@ -92,7 +106,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
       c("shiny","shinyhelper","data.table","Matrix","DT","magrittr","ggplot2",
-        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell","rbokeh", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = 'rename'")), path = fname)
+        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell","rbokeh", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')", "scToppR", "patchwork", "stringr, include.only = c('str_sub')")), path = fname)
     readr::write_file(wrSVload(shiny.prefix), append = TRUE, path = fname)
     readr::write_file(wrSVfix(), append = TRUE, path = fname)
     readr::write_file(wrSVmain(shiny.prefix, subst), append = TRUE, path = fname)
@@ -101,6 +115,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     readr::write_file(wrSVdeGenes(shiny.prefix, de.genes), append = TRUE, path = fname)
     readr::write_file(wrSVgeneSig(shiny.prefix, gene.ranks), append = TRUE, path = fname)
     readr::write_file(wrSVvolc(shiny.prefix, volc.plot), append = TRUE, path = fname)
+    readr::write_file(wrSVgeneOnt(shiny.prefix, gene.ont), append = TRUE, path = fname)
     readr::write_file(wrSVend(), append = TRUE, path = fname)
     
     
@@ -116,6 +131,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     readr::write_file(wrUIdeGenes(shiny.prefix, de.genes), append = TRUE, path = fname)
     readr::write_file(wrUIgeneSig(shiny.prefix, gene.ranks), append = TRUE, path = fname)
     readr::write_file(wrUIvolc(shiny.prefix, volc.plot), append = TRUE, path = fname)
+    readr::write_file(wrUIgeneOnt(shiny.prefix, gene.ont), append = TRUE, path = fname)
     readr::write_file(glue::glue(', \n'), append = TRUE, path = fname)
     readr::write_file(wrUIend(shiny.footnotes), append = TRUE, path = fname)
     
