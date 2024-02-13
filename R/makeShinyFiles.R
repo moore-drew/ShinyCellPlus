@@ -60,7 +60,7 @@
 #'
 #' @author John F. Ouyang
 #'
-#' @import data.table hdf5r reticulate hdf5r
+#' @import data.table hdf5r reticulate hdf5r scToppR
 #' @importFrom dplyr rename
 #'
 #' @examples
