@@ -21,7 +21,8 @@ makeShinyFiles(
   markers.top20 = FALSE,
   de.genes = FALSE,
   gene.ranks = FALSE,
-  volc.plot = FALSE
+  volc.plot = FALSE,
+  gene.ont = FALSE
 )
 }
 \arguments{
@@ -70,6 +71,24 @@ reductions. Default is to use UMAP if not TSNE embeddings}
 
 \item{chunkSize}{number of genes written to h5file at any one time. Lower 
 this number to reduce memory consumption. Should not be less than 10}
+
+\item{markers.all}{boolean flag as to whether to create the 
+"Cluster Markers, All" tab and prepare associated Seurat data}
+
+\item{markers.top20}{boolean flag as to whether to create the
+"Cluster Markers, Top 20" tab and prepare associated Seurat data}
+
+\item{de.genes}{boolean flag as to whether to create the "Diff. Exp. Genes"
+tab and prepre associated Seurat data}
+
+\item{gene.ranks}{boolean flag as to whether to create the "Gene Signature"
+tab and prepare the associated Seurat data}
+
+\item{volc.plot}{boolean flag as to whether to create the 
+"Diff. Gene Exp., Volcano" tab and prepare associated Seurat data}
+
+\item{gene.ont}{boolean flag as to whether to create the "ToppGene Ontology"
+tab and prepate the associated Seurat data}
 }
 \value{
 data files required for shiny app

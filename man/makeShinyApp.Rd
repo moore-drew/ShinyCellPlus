@@ -24,7 +24,8 @@ makeShinyApp(
   markers.top20 = FALSE,
   de.genes = FALSE,
   gene.ranks = FALSE,
-  volc.plot = FALSE
+  volc.plot = FALSE,
+  gene.ont = FALSE
 )
 }
 \arguments{
@@ -83,6 +84,24 @@ show in bubbleplot / heatmap}
 
 \item{default.dimred}{character vector specifying the two default dimension 
 reductions. Default is to use UMAP if not TSNE embeddings}
+
+\item{markers.all}{boolean flag as to whether to create the 
+"Cluster Markers, All" tab and prepare associated Seurat data}
+
+\item{markers.top20}{boolean flag as to whether to create the
+"Cluster Markers, Top 20" tab and prepare associated Seurat data}
+
+\item{de.genes}{boolean flag as to whether to create the "Diff. Exp. Genes"
+tab and prepre associated Seurat data}
+
+\item{gene.ranks}{boolean flag as to whether to create the "Gene Signature"
+tab and prepare the associated Seurat data}
+
+\item{volc.plot}{boolean flag as to whether to create the 
+"Diff. Gene Exp., Volcano" tab and prepare associated Seurat data}
+
+\item{gene.ont}{boolean flag as to whether to create the "ToppGene Ontology"
+tab and prepate the associated Seurat data}
 }
 \value{
 directory containing shiny app
