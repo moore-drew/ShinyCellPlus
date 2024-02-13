@@ -16,7 +16,8 @@ makeShinyCodes(
   markers.top20 = FALSE,
   de.genes = FALSE,
   gene.ranks = FALSE,
-  volc.plot = FALSE
+  volc.plot = FALSE,
+  gene.ont = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,24 @@ functionality in the shiny app. Default is to enable this functionality}
 smaller size can be used if you have many cells in your dataset}
 
 \item{ganalytics}{Google analytics tracking ID (e.g. "UA-123456789-0")}
+
+\item{markers.all}{boolean flag as to whether to create the 
+"Cluster Markers, All" tab and prepare associated Seurat data}
+
+\item{markers.top20}{boolean flag as to whether to create the
+"Cluster Markers, Top 20" tab and prepare associated Seurat data}
+
+\item{de.genes}{boolean flag as to whether to create the "Diff. Exp. Genes"
+tab and prepre associated Seurat data}
+
+\item{gene.ranks}{boolean flag as to whether to create the "Gene Signature"
+tab and prepare the associated Seurat data}
+
+\item{volc.plot}{boolean flag as to whether to create the 
+"Diff. Gene Exp., Volcano" tab and prepare associated Seurat data}
+
+\item{gene.ont}{boolean flag as to whether to create the "ToppGene Ontology"
+tab and prepate the associated Seurat data}
 }
 \value{
 server.R and ui.R required for shiny app
