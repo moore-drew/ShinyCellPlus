@@ -1702,7 +1702,6 @@ wrSVmain <- function(prefix, subst = "") {
 #'
 #' @param prefix file prefix
 #' @param markers.all TRUE/FALSE whether to create this tab
-#'
 #' @rdname wrSVmarkersAll
 #' @export wrSVmarkersAll
 #'
@@ -1720,11 +1719,11 @@ wrSVmarkersAll <- function(prefix, markers.all) {
             '     subset({prefix}m_all, cluster == input${prefix}m_all_select), filter="top" \n',
             '   ) \n',
             ' \n',
-            #'  output${prefix}m_all <- DT::renderDataTable( \n',
-            #'    {prefix}m_all, filter="top", options=list(autoWidth=TRUE) \n',
-            #'  ) \n',
-            #' \n',
-            '  #output$sc1m_all_select.ui <- renderUI ({{ \n',
+            # '  output${prefix}m_all <- DT::renderDataTable( \n',
+            # '    {prefix}m_all, filter="top", options=list(autoWidth=TRUE) \n',
+            # '  ) \n',
+            # ' \n',
+            '  #output${prefix}m_all_select.ui <- renderUI ({{ \n',
             '  #  choices <- strsplit({prefix}conf[grp==TRUE][UI==input${prefix}_meta_select]$fID, "\\\\|")[[1]] \n',
             '  #  print(choices) \n',
             '  #  selectInput("{prefix}m_all_select", "Select cell:", choices) \n',
@@ -2105,7 +2104,9 @@ wrSVgeneOnt <- function(prefix, gene.ont) {
     glue::glue(
               '  \n',
               '  # ToppGene ontology \n',
-              '  scTopp <- function(gene_ont, plot_select, category_select, balloons_select, clusters_select, text_size) {{ \n',
+              '  scTopp <- function(gene_ont, de_select, plot_select, category_select, balloons_select, clusters_select, text_size) {{ \n',
+              '    gene_ont <- filter(gene_ont, de_name == de_select) \n',
+              '    \n',
               '    if(plot_select == "Balloon plot") {{ \n', 
               '      toppBalloon(gene_ont, categories=category_select, balloons=balloons_select, x_axis_text_size=text_size) \n',
               '    }} \n', 
@@ -2174,7 +2175,7 @@ wrSVgeneOnt <- function(prefix, gene.ont) {
               '    if({prefix}gene_ont[1,1] == "ERROR") {{ \n', 
               '      return(ggplot() + labs(title="ERROR: data file \'{prefix}gene_ont.rds\' not found, cannot create plots!")) \n',
               '    }} \n', 
-              '    scTopp({prefix}gene_ont, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
+              '    scTopp({prefix}gene_ont, input$gont_de_select, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
               '  }}) \n',
               '  \n',      
               '  output$gont_download.pdf <- downloadHandler( \n',
@@ -2184,7 +2185,7 @@ wrSVgeneOnt <- function(prefix, gene.ont) {
               '    content = function(file) {{ ggsave( \n',
               '      #file, device = "pdf", height = plotSizeFixer(input$gont_plot_y), width = 1.25*plotSizeFixer(input$gont_plot_x), scale=0.25, units="mm", useDingbats = FALSE, \n',
               '      file, device = "pdf", height = input$gont_download_height, width = input$gont_download_width, useDingbats = FALSE, \n',
-              '      plot = scTopp({prefix}gene_ont, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
+              '      plot = scTopp({prefix}gene_ont, input$gont_de_select, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
               '    ) \n', 
               '    }} \n', 
               '  ) \n', 
@@ -2196,7 +2197,7 @@ wrSVgeneOnt <- function(prefix, gene.ont) {
               '    content = function(file) {{ ggsave( \n',
               '      #file, device = "png", height = plotSizeFixer(input$gont_plot_y), width = 1.25*plotSizeFixer(input$gont_plot_x), scale=0.25, units="mm", \n',
               '      file, device = "png", height = input$gont_download_height, width = input$gont_download_width, \n',
-              '      plot = scTopp({prefix}gene_ont, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
+              '      plot = scTopp({prefix}gene_ont, input$gont_de_select, input$gont_plot_select, input$gont_cat_select2, input$gont_balloon_val, input$gont_cluster_vals2, input$gont_text_size) \n',
               '    ) \n', 
               '    }} \n', 
               '  ) \n', 
@@ -3685,6 +3686,7 @@ wrUIgeneOnt <- function(prefix, gene.ont) {
        '    br(),br(), \n',
        '    fluidRow( \n',
        '      column(2, \n',
+       '        selectInput("gont_de_select", "Select differential expression:", choices=strsplit({prefix}conf$DEs[4], "\\\\|")[[1]]), \n',
        '        uiOutput("gont_cat_select.ui"), \n',  
        '        selectInput("gont_plot_select", "Select plot method:", choices=c("Balloon plot", "Cluster dotplot")), \n',
        '        conditionalPanel("input.gont_plot_select == \'Balloon plot\'", \n',
