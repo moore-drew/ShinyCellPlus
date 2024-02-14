@@ -590,7 +590,17 @@ makeShinyFiles <- function(
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         cat("creating .rds for all ToppGene ontology...\n")
         de_genes <- obj@misc$DE_genes$libra$overall
-        gene_ont <- toppFun(de_genes, cluster_col="cell_type", num_genes=20)
+        de_names <- levels(as.factor(de_genes$de_name))
+        gene_ont <- data.frame()
+        for(name in de_names) {
+          print(name)
+          de_genes_subset <- filter(de_genes, de_name == name)
+          de_genes_subset$cell_type <- as.character(de_genes_subset$cell_type)
+          gene_ont_subset <- toppFun(de_genes_subset, cluster_col="cell_type", num_genes=400)
+          gene_ont_subset$de_name <- name
+          gene_ont <- rbind(gene_ont, gene_ont_subset)
+        }
+        sc1conf$DEs[4] <- paste0(de_names, collapse="|")
         saveRDS(gene_ont, file=paste0(shiny.dir, "/", shiny.prefix, "gene_ont.rds"))
       }
       else {
