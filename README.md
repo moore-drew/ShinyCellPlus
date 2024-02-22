@@ -237,7 +237,7 @@ scConf <- modDefault(scConf, default1 = opt$scconf_defaults[1],
 makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
  	     ### NEW, OPTIONAL PAGE ARGUMENTS; DEFAULT TO 'FALSE' ###
              markers.all=TRUE, markers.top20=TRUE, de.genes=TRUE,
-             gene.ranks=TRUE, volc.plot=TRUE)
+             gene.ranks=TRUE, volc.plot=TRUE, gene.ont=TRUE)
 ```
 
 The Shiny App should run upon completion of this script.
