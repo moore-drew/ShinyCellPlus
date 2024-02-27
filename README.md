@@ -186,10 +186,9 @@ for (i in rownames(genotype_combs)) {
 ## Creating the Shiny App from Prepared Seurat Object
 
 >**IMPORTANT:** It is recommended to save your Seurat object as this time, as sometimes interacting with local Shiny apps or closing them before their data is fully loaded and presented can cause RStudio to crash.
-
-```
-saveRDS(seurat, file=paste0(opt$seurat_output_path, '/SCP_prepped_', opt$seurat_save_name))
-```
+>```
+>saveRDS(seurat, file=paste0(opt$seurat_output_path, '/SCP_prepped_', opt$seurat_save_name))
+>```
 
 With a prepared Seurat object, the final script for Shiny App creation is as follows:
 
