@@ -185,7 +185,7 @@ for (i in rownames(genotype_combs)) {
 
 ## Creating the Shiny App from Prepared Seurat Object
 
-IMPORTANT: It is recommended to save your Seurat object as this time, as sometimes interacting with local Shiny apps or closing them before their data is fully loaded and presented can cause RStudio to crash.
+>**IMPORTANT:** It is recommended to save your Seurat object as this time, as sometimes interacting with local Shiny apps or closing them before their data is fully loaded and presented can cause RStudio to crash.
 
 ```
 saveRDS(seurat, file=paste0(opt$seurat_output_path, '/SCP_prepped_', opt$seurat_save_name))
@@ -251,7 +251,7 @@ The Shiny App should run upon completion of this script.  Within the `makeShinyA
  
 Marking these arguments as `TRUE` will attempt to create them with set scripts.  If the required data is not embedded within the Seurat object then the tab will be created with an error message and will not crash the Shiny session.
 
-WARNING: The data for each of these tabs is processed from the associated Seurat object and saved as specifically named files for each tab.  These files remain in the directory after you exit the locally hosted Shiny app.  If you remain in the same directory and run the scripts with a new Seurat object with the same additional tab flags these files will /ONLY/ be overwritten if the new Seurat object has the data associated with said tab, but the script will still read the old file! Be sure to either use a different directory or clearing the directory when using different Seurat objects or after manipulating said Seurat object.  Currently we are working to fix this, but this is something the user should be aware of.
+>***WARNING:*** The data for each of these tabs is processed from the associated Seurat object and saved as specifically named files for each tab.  These files remain in the directory after you exit the locally hosted Shiny app.  If you remain in the same directory and run the scripts with a new Seurat object with the same additional tab flags these files will ***ONLY*** be overwritten if the new Seurat object has the data associated with said tab, but the script will still read the old file! Be sure to either use a different directory or clearing the directory when using different Seurat objects or after manipulating said Seurat object.  Currently we are working to fix this, but this is something the user should be aware of.
 
 ## Deploying to shinyapps.io
 
