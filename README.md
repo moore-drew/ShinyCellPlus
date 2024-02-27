@@ -242,12 +242,12 @@ makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
 
 The Shiny App should run upon completion of this script.  Within the `makeShinyApp()` function call, you will see a series of arguments that allow for the custom addition of optional tabs that we have added; these include:
 
-	* `markers.all`: adds "Cluster Markers, All" tab; displays associations between genetic markers and Seurat data clusters.  Requires Presto data.
-	* `markers.top20`: adds "Cluster Markers, Top 20" tab; displays associations between the top 20 genetic markers in all Seurat data clusters.  Requires Presto data.
-	* `de.genes`: adds "Diff. Exp. Genes" tab; displays differentially expressed gene data obtained through the scripts in the above Libra section.  Requires Libra data.
-	* `gene.ranks`: adds "Gene Signature" tab; shows AUC calculations for custom gene set and their combined signatures over a UMAP.  Requires AUCell data.
-	* `volc.plot`: adds "Diff. Gene Exp., Volcano" tab; allows for viewing of customizable volcano plots of differentially expressed gene data.  Requires Libra data.
-	* `gene.ont`: adds "ToppGene Ontology" tab; shows balloon plots and cluster dotplots of ToppGene queries with the Libra differentially expressed gene data.  Requires Libra data.
+ * `markers.all`: adds "Cluster Markers, All" tab; displays associations between genetic markers and Seurat data clusters.  Requires Presto data.
+ * `markers.top20`: adds "Cluster Markers, Top 20" tab; displays associations between the top 20 genetic markers in all Seurat data clusters.  Requires Presto data.
+ * `de.genes`: adds "Diff. Exp. Genes" tab; displays differentially expressed gene data obtained through the scripts in the above Libra section.  Requires Libra data.
+ * `gene.ranks`: adds "Gene Signature" tab; shows AUC calculations for custom gene set and their combined signatures over a UMAP.  Requires AUCell data.
+ * `volc.plot`: adds "Diff. Gene Exp., Volcano" tab; allows for viewing of customizable volcano plots of differentially expressed gene data.  Requires Libra data.
+ * `gene.ont`: adds "ToppGene Ontology" tab; shows balloon plots and cluster dotplots of ToppGene queries with the Libra differentially expressed gene data.  Requires Libra data.
  
 Marking these arguments as `TRUE` will attempt to create them with set scripts.  If the required data is not embedded within the Seurat object then the tab will be created with an error message and will not crash the Shiny session.
 
