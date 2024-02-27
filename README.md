@@ -235,12 +235,22 @@ scConf <- modDefault(scConf, default1 = opt$scconf_defaults[1],
 
 
 makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
- 	     ### NEW, OPTIONAL PAGE ARGUMENTS; DEFAULT TO 'FALSE' ###
+ 	     ### NEW, EXPANDED PAGE ARGUMENTS; THEY DEFAULT TO 'FALSE' ###
              markers.all=TRUE, markers.top20=TRUE, de.genes=TRUE,
              gene.ranks=TRUE, volc.plot=TRUE, gene.ont=TRUE)
 ```
 
-The Shiny App should run upon completion of this script.
+The Shiny App should run upon completion of this script.  Within the `makeShinyApp()` function call, you will see a series of arguments that allow for the custom addition of optional tabs that we have added; these include:
+	* `markers.all`: adds "Cluster Markers, All" tab; displays associations between genetic markers and Seurat data clusters.  Requires Presto data.
+	* `markers.top20`: adds "Cluster Markers, Top 20" tab; displays associations between the top 20 genetic markers in all Seurat data clusters.  Requires Presto data.
+	* `de.genes`: adds "Diff. Exp. Genes" tab; displays differentially expressed gene data obtained through the scripts in the above Libra section.  Requires Libra data.
+	* `gene.ranks`: adds "Gene Signature" tab; shows AUC calculations for custom gene set and their combined signatures over a UMAP.  Requires AUCell data.
+	* `volc.plot`: adds "Diff. Gene Exp., Volcano" tab; allows for viewing of customizable volcano plots of differentially expressed gene data.  Requires Libra data.
+	* `gene.ont`: adds "ToppGene Ontology" tab; shows balloon plots and cluster dotplots of ToppGene queries with the Libra differentially expressed gene data.  Requires Libra data.
+ 
+Marking these arguments as `TRUE` will attempt to create them with set scripts.  If the required data is not embedded within the Seurat object then the tab will be created with an error message and will not crash the Shiny session.
+
+WARNING: The data for each of these tabs is processed from the associated Seurat object and saved as specifically named files for each tab.  These files remain in the directory after you exit the locally hosted Shiny app.  If you remain in the same directory and run the scripts with a new Seurat object with the same additional tab flags these files will /ONLY/ be overwritten if the new Seurat object has the data associated with said tab, but the script will still read the old file! Be sure to either use a different directory or clearing the directory when using different Seurat objects or after manipulating said Seurat object.  Currently we are working to fix this, but this is something the user should be aware of.
 
 ## Deploying to shinyapps.io
 
