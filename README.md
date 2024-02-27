@@ -241,6 +241,7 @@ makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
 ```
 
 The Shiny App should run upon completion of this script.  Within the `makeShinyApp()` function call, you will see a series of arguments that allow for the custom addition of optional tabs that we have added; these include:
+
 	* `markers.all`: adds "Cluster Markers, All" tab; displays associations between genetic markers and Seurat data clusters.  Requires Presto data.
 	* `markers.top20`: adds "Cluster Markers, Top 20" tab; displays associations between the top 20 genetic markers in all Seurat data clusters.  Requires Presto data.
 	* `de.genes`: adds "Diff. Exp. Genes" tab; displays differentially expressed gene data obtained through the scripts in the above Libra section.  Requires Libra data.
