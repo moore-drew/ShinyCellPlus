@@ -469,34 +469,41 @@ makeShinyFiles <- function(
   saveRDS(sc1def,  file = paste0(shiny.dir, "/", shiny.prefix, "def.rds"))
 
   sc1conf$extra_tabs <- FALSE
-  sc1conf$DEs<-FALSE
+  sc1conf$DEs <- FALSE
+  sc1conf$gene_ranks <- FALSE
+  sc1conf$markers <- FALSE
 
   
   if(class(obj)[1]=='Seurat') {
     if(markers.all==TRUE) { 
-      sc1conf$extra_tabs[1] = TRUE
+      #sc1conf$extra_tabs[1] = TRUE
       if(!is.null(obj@misc$markers$presto$all)) {
-        cat("creating .rds for all presto markers...\n")
+        cat("creating .rds for all presto markers...\n\n")
         m_all <- obj@misc$markers$presto$all
         names(m_all)[names(m_all) == 'group'] <- 'cluster'
         #sc1conf$extra_tabs[1] = TRUE
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
+        sc1conf$markers[1] <- TRUE
+        sc1conf$extra_tabs[1] <- TRUE
       }
       else if(!is.null(obj@misc$markers$seurat$all)) {
-        cat("creating .rds for Seurat::FindAllMarkers() results...\n")
+        cat("creating .rds for Seurat::FindAllMarkers() results...\n\n")
         m_all <- obj@misc$markers$seurat$all
         saveRDS(m_all, file=paste0(shiny.dir, "/", shiny.prefix, "m_all.rds"))
+        sc1conf$markers[1] <- TRUE
+        sc1conf$extra_tabs[1] <- TRUE
       }
       else {
-        cat("Warning: 'markers.all' not found in Seurat (structure expected: seurat@misc$markers$presto$all);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+        sc1conf$markers[1] <- "ERROR"
+        cat("Warning: 'markers.all' data not found in Seurat (structure expected: seurat@misc$markers$presto$all);\ncorresponding Shiny tab ('Cluster Markers, All') will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[1] = FALSE
       }
     }
 
     if(markers.top20==TRUE) {
-      sc1conf$extra_tabs[2] = TRUE
+      #sc1conf$extra_tabs[2] = TRUE
       if(!is.null(obj@misc$markers$presto$top_20)) {
-        cat("creating .rds for top 20 presto markers...\n")
+        cat("creating .rds for top 20 presto markers...\n\n")
         m_t20 <- obj@misc$markers$presto$top_20
         names(m_t20)[names(m_t20) == 'group'] <- 'cluster'
 
@@ -510,24 +517,29 @@ makeShinyFiles <- function(
 
         #sc1conf$extra_tabs[2] = TRUE
         saveRDS(m_t20, file=paste0(shiny.dir, "/", shiny.prefix, "m_t20.rds"))
+        sc1conf$markers[2] <- TRUE
+        sc1conf$extra_tabs[2] = TRUE
       }
       else if(!is.null(obj@misc$markers$seurat$top_20)) {
-        cat("creating .rds for Seurat::FindAllMarkers() top 20 results...\n")
+        cat("creating .rds for Seurat::FindAllMarkers() top 20 results...\n\n")
         m_t20 <- obj@misc$markers$seurat$top_20
         saveRDS(m_t20, file=paste0(shiny.dir, "/", shiny.prefix, "m_t20.rds"))
+        sc1conf$markers[2] <- TRUE
+        sc1conf$extra_tabs[2] = TRUE
       }
       else {
-        cat("Warning: 'markers.top20' not found in Seurat (structure expected: seurat@misc$markers$presto$top_20);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+        sc1conf$markers[2] <- "ERROR"
+        cat("Warning: 'markers.top20' data not found in Seurat (structure expected: seurat@misc$markers$presto$top_20);\ncorresponding Shiny tab ('Cluster Markers, Top 20') will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[2] = FALSE
       }
     }
 
     if(de.genes==TRUE) { 
-      sc1conf$extra_tabs[3] = TRUE
+      #sc1conf$extra_tabs[3] = TRUE
       # TODO: figure out how to deal with multiple libra tables, similar to how
       # it is dealt with in the lower volc.plot conditional
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
-        cat("creating .rds for differentially expressed genes...\n")
+        cat("creating .rds for differentially expressed genes...\n\n")
         de_genes <- obj@misc$DE_genes$libra$overall
         #sc1conf$extra_tabs[3] = TRUE
         de_genes$de_family <- NULL
@@ -536,32 +548,36 @@ makeShinyFiles <- function(
         de_genes$de_name <- as.factor(de_genes$de_name)
         sc1conf$DEs[1] <- paste0(levels(de_genes$de_name), collapse="|")
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes.rds"))
+        sc1conf$extra_tabs[3] <- TRUE
       }
       else {
-        sc1conf$DEs[1] <- c("ERROR|ERROR")
-        cat("Warning: 'de.genes' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+        sc1conf$DEs[1] <- "ERROR" # |
+        cat("Warning: 'de.genes' data not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab ('Diff. Exp. Genes') will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[3] = FALSE
       }
     }
 
     if(gene.ranks==TRUE) {
-      sc1conf$extra_tabs[4] = TRUE
+      #sc1conf$extra_tabs[4] = TRUE
       if(!is.null(obj@misc$gene_ranks$aucell$all)) {
-        cat("creating .rds for gene ranks (may take a while)...\n")
+        cat("creating .rds for gene ranks (may take a while)...\n\n")
         gene_ranks <- obj@misc$gene_ranks$aucell$all
         #sc1conf$extra_tabs[4] = TRUE
         saveRDS(gene_ranks, file=paste0(shiny.dir, "/", shiny.prefix, "gene_ranks.rds"))
+        sc1conf$gene_ranks[1] <- TRUE
+        sc1conf$extra_tabs[4] <- TRUE
       }
       else {
-        cat("Warning: 'gene.ranks' not found in Seurat (structure expected: seurat@misc$gene_ranks$aucell$all);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+        sc1conf$gene_ranks[1] <- "ERROR"
+        cat("Warning: 'gene.ranks' data not found in Seurat (structure expected: seurat@misc$gene_ranks$aucell$all);\ncorresponding Shiny tab ('Gene Signature') will be created but with an error message instead of what is expected...\n\n")
         #sc1conf$extra_tabs[4] = FALSE
       }
     }
 
     if(volc.plot==TRUE) {
-      sc1conf$extra_tabs[5] = TRUE
+      #sc1conf$extra_tabs[5] = TRUE
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
-        cat("creating .rds of differentially expressed genes formatted for ggvolc...\n")
+        cat("creating .rds of differentially expressed genes formatted for ggvolc...\n\n")
         # check to see if has correct column names?
         # or maybe wrap this in a try-catch for rename
         # errors?
@@ -574,21 +590,85 @@ makeShinyFiles <- function(
         columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
         uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
-        #sc1conf$extra_tabs[5] = TRUE
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+        sc1conf$extra_tabs[5] <- TRUE
       }
-      else {
-        sc1conf$DEs[2] <- c("ERROR|ERROR")
-        sc1conf$DEs[3] <- c("ERROR|ERROR")
-        cat("Warning: 'volc.plot' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab will be created but with an error message instead of what is expected...\n\n")
+      else { # if want to make plot but data is not in seurat
+        # if(file.exists(paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))) { # but a correctly named file was previously created
+        #   # ask them whether to use the file, delete the file (do not auto delete for safety / liability reasons), or abort the session
+        #   cat("\nData for 'volc.plot' currently not found in Seurat object (structure expected: seurat@misc$DE_genes$libra$overall)...\nThere is a previously created data file (\"de_genes_ggvolc.rds\"), would you like to use this file?\n(WARNING: Make sure this file belongs to your Seurat dataset or it will lead to incorrect data presentation!) \n\t1. use this file (make sure data corresponds to your Seurat object's state!)\n\t2. delete this file and continue (an error will be shown on the tab for missing file)\n\t3. do not use this tab (file will still exist)\n\t4. to abort")
+        #   while(TRUE) {
+        #     resp <- readline("\t>")
+        #     if(resp=="1") {
+        #       cat("\n")
+        #       de_genes <- readRDS(paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+        #       sc1conf$DEs[2] <- paste0(levels(de_genes$de_name), collapse="|")
+        #       columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
+        #       uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
+        #       sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
+        #       break
+        #     }
+        #     else if(resp=="2") {
+        #       cat("\n")
+        #       file.remove(paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+        #       # needed if you are already deleting the file?
+        #       # should only be needed if data isn't in seurat,
+        #       # but the associated file exists, which this 
+        #       # section should be taking care of...
+        #       # could use this to catch some sort of unknown
+        #       # state that shouldn't be reached?
+        #       sc1conf$DEs[2] <- "ERROR" # |
+        #       sc1conf$DEs[3] <- "ERROR" # |
+        #       break
+        #     }
+        #     else if(resp=="3") {
+        #       # problem with this is that the volc.plot flag
+        #       # stays TRUE and gets carried over to the 
+        #       # makeShinyCodes.R script and still makes the
+        #       # tab.  hotfixed with the double sc1conf$DE
+        #       # ERRORS, but that's obviously not what is
+        #       # expected by user... need to find a way to
+        #       # transfer this info to writer.R without
+        #       # changing function signatures for ease?
+        #       # could make it so that the page flags
+        #       # get condensed into a list returned by this
+        #       # script and used in the makeShinyCodes.R
+        #       # script?  
+        #       cat("\n")
+        #       sc1conf$extra_tabs[5] <- FALSE
+        #       sc1conf$DEs[2] <- "ERROR" # |
+        #       sc1conf$DEs[3] <- "ERROR" # |
+        #       break
+        #     }
+        #     else if(resp=="4") {
+        #       abort()
+        #     }
+        #     else {
+        #       cat("\nIncorrect response, please choose from the following:\n\t1. use this file (make sure data corresponds to your Seurat object's state!)\n\t2. delete this file and continue (an error will be shown on the tab for missing file)\n\t3. do not use this tab (file will still exist)\n\t4. abort")
+        #     }
+        #   }
+        # }
+        # else {
+          # instead of all of that above, what about just setting extra_tabs[5]
+          # to FALSE, that way it doesn't load a file, sc1conf$DEs[2] and [3] 
+          # to "ERROR", and then running that to show the error?
+          # how would you get this to work with the spreadsheet tabs?
+
+          #sc1conf$extra_tabs[5] = FALSE
+          sc1conf$DEs[2] <- "ERROR" # |
+          sc1conf$DEs[3] <- "ERROR" # |
+
+          # "or pre-existing file (name expected: de_genes_ggvolc.rds)"
+          cat("Warning: 'volc.plot' data not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab ('Diff. Gene Exp., Volcano') will be created but with an error message instead of what is expected...\n\n")
+        #}
         #sc1conf$extra_tabs[5] = FALSE
       }
     }
 
     if(gene.ont==TRUE) {
-      sc1conf$extra_tabs[6] = TRUE
+      #sc1conf$extra_tabs[6] = TRUE
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
-        cat("creating .rds for all ToppGene ontology...\n")
+        cat("creating .rds for all ToppGene ontology...\n\n")
         de_genes <- obj@misc$DE_genes$libra$overall
         de_names <- levels(as.factor(de_genes$de_name))
         gene_ont <- data.frame()
@@ -602,9 +682,11 @@ makeShinyFiles <- function(
         }
         sc1conf$DEs[4] <- paste0(de_names, collapse="|")
         saveRDS(gene_ont, file=paste0(shiny.dir, "/", shiny.prefix, "gene_ont.rds"))
+        sc1conf$extra_tabs[6] <- TRUE
       }
       else {
-        cat("Warning: 'de.genes' not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab ('ToppGene Ontology') will be created but with an error message instead of what is expected...\n\n")
+        sc1conf$DEs[4] <- "ERROR"
+        cat("Warning: 'de.genes' data not found in Seurat (structure expected: seurat@misc$DE_genes$libra$overall);\ncorresponding Shiny tab ('ToppGene Ontology') will be created but with an error message instead of what is expected...\n\n")
       }
     }
   }
