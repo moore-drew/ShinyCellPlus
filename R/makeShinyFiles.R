@@ -42,7 +42,7 @@
 #'   show in bubbleplot / heatmap
 #' @param default.dimred character vector specifying the two default dimension 
 #'   reductions. Default is to use UMAP if not TSNE embeddings
-#' @param chunkSize number of genes written to h5file at any one time. Lower 
+#' @param chunk.size number of genes written to h5file at any one time. Lower 
 #'   this number to reduce memory consumption. Should not be less than 10
 #' @param markers.all boolean flag as to whether to create the 
 #'   "Cluster Markers, All" tab and prepare associated Seurat data
@@ -56,6 +56,9 @@
 #'   "Diff. Gene Exp., Volcano" tab and prepare associated Seurat data
 #' @param gene.ont boolean flag as to whether to create the "ToppGene Ontology"
 #'   tab and prepate the associated Seurat data
+#' @param pval.cutoff upper limit of pval to filter cluster gene expression by (pvals
+#'    greater than this are filtered out)
+#' @param num.genes max number of most expressed genes to include in ToppGene query
 #' @return data files required for shiny app
 #'
 #' @author John F. Ouyang
@@ -76,13 +79,12 @@ makeShinyFiles <- function(
   obj, scConf, gex.assay = NA, gex.slot = c("data", "scale.data", "counts"), 
   gene.mapping = FALSE, shiny.prefix = "sc1", shiny.dir = "shinyApp/",
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, chunkSize = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE){
+  default.dimred = NA, chunk.size = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE, pval.cutoff=0.5, num.genes=400){
   ### Preprocessing and checks
   # Generate defaults for gex.assay / gex.slot
   if(class(obj)[1] == "Seurat"){
     # Seurat Object
-    if(is.na(gex.assay[1])){gex.assay = "RNA"}
-
+    if(is.na(gex.assay[1])){gex.assay = "RNA"} # check for existence of this assay, then "Spatial?"  is it possible for a Seurat to have both RNA and Spatial assays in the same object?
     # alternative to these conditionals is to use GetAssayData(obj, assay, slot), 
     # but the slot parameter would still need to be conditionally chosen in some way
     # to either "data" or "counts"
@@ -255,7 +257,7 @@ makeShinyFiles <- function(
       tmp$UI = gsub("_", "", tmp$UI)
       sc1conf = rbindlist(list(sc1conf, tmp))
     }
-    
+
   } else if (class(obj)[1] == "SingleCellExperiment"){
     # SCE Object
     for(iDR in SingleCellExperiment::reducedDimNames(obj)){
@@ -326,9 +328,9 @@ makeShinyFiles <- function(
     "data",  dtype = h5types$H5T_NATIVE_FLOAT,
     space = H5S$new("simple", dims = gex.matdim, maxdims = gex.matdim),
     chunk_dims = c(1,gex.matdim[2]))
-  chk = chunkSize
+  chk = chunk.size
   while(chk > (gex.matdim[1]-8)){
-    chk = floor(chk / 2)     # Account for cases where nGene < chunkSize
+    chk = floor(chk / 2)     # Account for cases where nGene < chunk.size
   } 
   if(class(obj)[1] == "Seurat"){
     # Seurat Object
@@ -676,7 +678,7 @@ makeShinyFiles <- function(
           print(name)
           de_genes_subset <- filter(de_genes, de_name == name)
           de_genes_subset$cell_type <- as.character(de_genes_subset$cell_type)
-          gene_ont_subset <- toppFun(de_genes_subset, cluster_col="cell_type", num_genes=400)
+          gene_ont_subset <- toppFun(de_genes_subset, cluster_col="cell_type", p_val_col="p_val_adj", num_genes=num.genes, pval_cutoff=pval.cutoff, min_genes=1)
           gene_ont_subset$de_name <- name
           gene_ont <- rbind(gene_ont, gene_ont_subset)
         }
