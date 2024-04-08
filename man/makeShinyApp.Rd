@@ -25,7 +25,9 @@ makeShinyApp(
   de.genes = FALSE,
   gene.ranks = FALSE,
   volc.plot = FALSE,
-  gene.ont = FALSE
+  gene.ont = FALSE,
+  pval.cutoff = 0.5,
+  num.genes = 400
 )
 }
 \arguments{
@@ -102,6 +104,11 @@ tab and prepare the associated Seurat data}
 
 \item{gene.ont}{boolean flag as to whether to create the "ToppGene Ontology"
 tab and prepate the associated Seurat data}
+
+\item{pval.cutoff}{upper limit of pval to filter cluster gene expression by (pvals
+greater than this are filtered out)}
+
+\item{num.genes}{max number of most expressed genes to include in ToppGene query}
 }
 \value{
 directory containing shiny app

@@ -16,13 +16,15 @@ makeShinyFiles(
   default.gene2 = NA,
   default.multigene = NA,
   default.dimred = NA,
-  chunkSize = 500,
+  chunk.size = 500,
   markers.all = FALSE,
   markers.top20 = FALSE,
   de.genes = FALSE,
   gene.ranks = FALSE,
   volc.plot = FALSE,
-  gene.ont = FALSE
+  gene.ont = FALSE,
+  pval.cutoff = 0.5,
+  num.genes = 400
 )
 }
 \arguments{
@@ -69,7 +71,7 @@ show in bubbleplot / heatmap}
 \item{default.dimred}{character vector specifying the two default dimension 
 reductions. Default is to use UMAP if not TSNE embeddings}
 
-\item{chunkSize}{number of genes written to h5file at any one time. Lower 
+\item{chunk.size}{number of genes written to h5file at any one time. Lower 
 this number to reduce memory consumption. Should not be less than 10}
 
 \item{markers.all}{boolean flag as to whether to create the 
@@ -89,6 +91,11 @@ tab and prepare the associated Seurat data}
 
 \item{gene.ont}{boolean flag as to whether to create the "ToppGene Ontology"
 tab and prepate the associated Seurat data}
+
+\item{pval.cutoff}{upper limit of pval to filter cluster gene expression by (pvals
+greater than this are filtered out)}
+
+\item{num.genes}{max number of most expressed genes to include in ToppGene query}
 }
 \value{
 data files required for shiny app
