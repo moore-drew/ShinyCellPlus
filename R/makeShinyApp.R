@@ -97,7 +97,7 @@ makeShinyApp <- function(
   # Wrapper for two main functions
 
   makeShinyFiles(obj = obj, scConf = scConf, 
-                 gex.assay = gex.assay[1], gex.slot = gex.slot[1], 
+                 gex.assay = gex.assay[1], gex.slot = gex.slot, 
                  gene.mapping = gene.mapping, 
                  shiny.prefix = "sc1", shiny.dir = shiny.dir, default.gene1, default.gene2, default.multigene, default.dimred, markers.all = markers.all, markers.top20 = markers.top20, 
                  de.genes = de.genes, gene.ranks = gene.ranks, volc.plot = volc.plot, gene.ont = gene.ont, pval.cutoff=pval.cutoff, num.genes=num.genes)
