@@ -1727,6 +1727,16 @@ wrSVmarkersAll <- function(prefix, markers.all) {
             '     }} \n',
             '   }}) \n',
             ' \n',
+            '   output${prefix}m_all_select.ui <- renderUI ({{ \n',
+            '     if({prefix}conf$markers[1] == "ERROR" | {prefix}m_all[1,1] == "ERROR") {{ \n',
+            '       renderText("") \n',
+            '     }} \n',
+            '     else {{ \n',
+            '       renderUI({{ \n',
+            '         selectInput("{prefix}m_all_select", "Select cell:", choices=unique({prefix}m_all$cluster)) \n',
+            '       }}) \n',
+            '     }} \n',
+            '   }}) \n',
             ' \n'
     )
   }
@@ -3535,21 +3545,21 @@ wrUImarkersAll <- function(prefix, markers.all) {
   if(markers.all == TRUE) {
     graphs <- graphs + glue::glue(
         '  , \n',
+        '  \n',
         '  tabPanel( \n',
         '    HTML("Cluster Markers, All"), \n',
         '    h4("This page is meant to display associations between genetic markers and Seurat data clusters through an embedded spreadsheet."), \n',
         '    br(),br(), \n',
         '    fluidRow( \n',
         '      #selectInput("{prefix}m_meta_select", "Select meta:", choices=list({prefix}def$meta1, {prefix}def$meta1)), \n',
-        '      selectInput("{prefix}m_all_select", "Select cell:", choices=strsplit({prefix}conf[grp==TRUE][UI=={prefix}def$meta1]$fID, "\\\\|")[[1]]), # would you ever want to look at all? \n',
-        '      #uiOutput("{prefix}m_all_select.ui"), \n',
+        '      #selectInput("{prefix}m_all_select", "Select cell:", choices=strsplit({prefix}conf[grp==TRUE][UI=={prefix}def$meta1]$fID, "\\\\|")[[1]]), # would you ever want to look at all? \n',
+        '      uiOutput("{prefix}m_all_select.ui"), \n',
         '      column(12, \n',
         '        #DT::dataTableOutput("{prefix}m_all.ui") \n',
         '        uiOutput("{prefix}m_all.ui") \n',
         '      ) \n',
         '    ) \n',
         '  ) \n',
-        '  \n',
         .trim = FALSE
       )
   }
@@ -3568,6 +3578,7 @@ wrUImarkersTop20 <- function(prefix, markers.top20) {
   if(markers.top20 == TRUE) {
     graphs <- graphs + glue::glue(
         '  , \n',
+        '  \n',
         '  tabPanel( \n',
         '    HTML("Cluster Markers, Top 20"), \n',
         '    h4("This page is meant to display associations between the top 20 genetic markers and Seurat data clusters through an embedded spreadsheet."), \n',
@@ -3579,7 +3590,6 @@ wrUImarkersTop20 <- function(prefix, markers.top20) {
         '      ) \n',
         '    ) \n',
         '  ) \n',
-        '  \n',
         .trim = FALSE
       )
   }
@@ -3598,6 +3608,7 @@ wrUIdeGenes <- function(prefix, de.genes) {
   if(de.genes == TRUE) {
     graphs <- graphs + glue::glue(
         '  , \n',
+        '  \n',
         '  tabPanel( \n',
         '    HTML("Diff. Exp. Genes"), \n',
         '    h4("This page is meant to display associations between genetic markers and cell types tagged to their Seurat data cluster."), \n',
@@ -3621,7 +3632,6 @@ wrUIdeGenes <- function(prefix, de.genes) {
         '      ) \n',
         '    ) \n',
         '  ) \n',
-        '  \n',
         .trim = FALSE
       )
   }
