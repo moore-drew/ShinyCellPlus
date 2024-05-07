@@ -55,7 +55,7 @@
 makeShinyCodes <- function(shiny.title, shiny.footnotes,
                            shiny.prefix, shiny.dir, 
                            enableSubset = TRUE, defPtSiz = 1.25,
-                           ganalytics = NA, markers.all = FALSE, markers.top20 = FALSE, de.genes = FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE){
+                           ganalytics = NA, markers.all = FALSE, cluster.meta = NA, markers.top20 = FALSE, de.genes = FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE){
   subst = "#"
   if(enableSubset){subst = ""}
   defPtSiz = as.character(defPtSiz)
@@ -85,7 +85,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     readr::write_file(wrUIload(shiny.prefix), append = TRUE, file = fname)
     readr::write_file(wrUIsingle(shiny.title, ganalytics), append = TRUE, file = fname)
     readr::write_file(wrUImain(shiny.prefix, subst, defPtSiz), append = TRUE, file = fname)
-    readr::write_file(wrUImarkersAll(shiny.prefix, markers.all), append = TRUE, file = fname)
+    readr::write_file(wrUImarkersAll(shiny.prefix, markers.all, cluster.meta), append = TRUE, file = fname)
     readr::write_file(wrUImarkersTop20(shiny.prefix, markers.top20), append = TRUE, file = fname)
     readr::write_file(wrUIdeGenes(shiny.prefix, de.genes), append = TRUE, file = fname)
     readr::write_file(wrUIgeneSig(shiny.prefix, gene.ranks), append = TRUE, file = fname)
@@ -126,7 +126,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     readr::write_file(wrUIload(shiny.prefix), append = TRUE, path = fname)
     readr::write_file(wrUIsingle(shiny.title, ganalytics), append = TRUE, path = fname)
     readr::write_file(wrUImain(shiny.prefix, subst, defPtSiz), append = TRUE, path = fname)
-    readr::write_file(wrUImarkersAll(shiny.prefix, markers.all), append = TRUE, path = fname)
+    readr::write_file(wrUImarkersAll(shiny.prefix, markers.all, cluster.meta), append = TRUE, path = fname)
     readr::write_file(wrUImarkersTop20(shiny.prefix, markers.top20), append = TRUE, path = fname)
     readr::write_file(wrUIdeGenes(shiny.prefix, de.genes), append = TRUE, path = fname)
     readr::write_file(wrUIgeneSig(shiny.prefix, gene.ranks), append = TRUE, path = fname)
