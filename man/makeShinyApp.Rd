@@ -21,6 +21,7 @@ makeShinyApp(
   default.multigene = NA,
   default.dimred = NA,
   markers.all = FALSE,
+  cluster.meta = "seurat_clusters",
   markers.top20 = FALSE,
   de.genes = FALSE,
   gene.ranks = FALSE,

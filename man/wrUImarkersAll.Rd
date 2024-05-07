@@ -4,12 +4,14 @@
 \alias{wrUImarkersAll}
 \title{Append markers, all to the main block of ui.R}
 \usage{
-wrUImarkersAll(prefix, markers.all)
+wrUImarkersAll(prefix, markers.all, cluster.meta)
 }
 \arguments{
 \item{prefix}{file prefix}
 
 \item{markers.all}{TRUE/FALSE whether to include this tab}
+
+\item{cluster.meta}{meta.data column to use for cluster / cell-type subsetting}
 }
 \description{
 Append markers, all to the main block of ui.R

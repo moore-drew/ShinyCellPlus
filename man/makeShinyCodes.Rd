@@ -13,6 +13,7 @@ makeShinyCodes(
   defPtSiz = 1.25,
   ganalytics = NA,
   markers.all = FALSE,
+  cluster.meta = NA,
   markers.top20 = FALSE,
   de.genes = FALSE,
   gene.ranks = FALSE,
