@@ -1727,6 +1727,16 @@ wrSVmarkersAll <- function(prefix, markers.all) {
             '     }} \n',
             '   }}) \n',
             ' \n',
+            '   output${prefix}m_all_select.ui <- renderUI ({{ \n',
+            '     if({prefix}conf$markers[1] == "ERROR" | {prefix}m_all[1,1] == "ERROR") {{ \n',
+            '       renderText("") \n',
+            '     }} \n',
+            '     else {{ \n',
+            '       renderUI({{ \n',
+            '         selectInput("{prefix}m_all_select", "Select cell:", choices=unique({prefix}m_all$cluster)) \n',
+            '       }}) \n',
+            '     }} \n',
+            '   }}) \n',
             ' \n'
     )
   }
@@ -3526,12 +3536,11 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
 #'
 #' @param prefix file prefix
 #' @param markers.all TRUE/FALSE whether to include this tab
-#' @param cluster.meta meta.data column to use for cluster / cell-type subsetting
 #' @rdname wrUImarkersAll
 #' @export wrUImarkersAll
 #'
 
-wrUImarkersAll <- function(prefix, markers.all, cluster.meta) {
+wrUImarkersAll <- function(prefix, markers.all) {
   graphs <- ''
   if(markers.all == TRUE) {
     graphs <- graphs + glue::glue(
@@ -3544,8 +3553,7 @@ wrUImarkersAll <- function(prefix, markers.all, cluster.meta) {
         '    fluidRow( \n',
         '      #selectInput("{prefix}m_meta_select", "Select meta:", choices=list({prefix}def$meta1, {prefix}def$meta1)), \n',
         '      #selectInput("{prefix}m_all_select", "Select cell:", choices=strsplit({prefix}conf[grp==TRUE][UI=={prefix}def$meta1]$fID, "\\\\|")[[1]]), # would you ever want to look at all? \n',
-        '      selectInput("sc1m_all_select", "Select cell:", choices=strsplit(sc1conf[ID == \'{cluster.meta}\']$fID, "\\\\|")[[1]]), \n',
-        '      #uiOutput("{prefix}m_all_select.ui"), \n',
+        '      uiOutput("{prefix}m_all_select.ui"), \n',
         '      column(12, \n',
         '        #DT::dataTableOutput("{prefix}m_all.ui") \n',
         '        uiOutput("{prefix}m_all.ui") \n',

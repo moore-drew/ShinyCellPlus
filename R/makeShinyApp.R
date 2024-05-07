@@ -91,7 +91,7 @@ makeShinyApp <- function(
   shiny.title = "scRNA-seq shiny app", shiny.footnotes = "",
   shiny.dir = "shinyApp/", enableSubset = TRUE, defPtSiz = 1.25, ganalytics=NA,
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, markers.all=FALSE, cluster.meta="seurat_clusters", markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE, pval.cutoff=0.5, num.genes=400) {
+  default.dimred = NA, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE, pval.cutoff=0.5, num.genes=400) {
   
   # Checks are performed in respective functions
   # Wrapper for two main functions
@@ -104,7 +104,7 @@ makeShinyApp <- function(
   makeShinyCodes(shiny.title = shiny.title, shiny.footnotes = shiny.footnotes,
                  shiny.prefix = "sc1", shiny.dir = shiny.dir, 
                  enableSubset = enableSubset, defPtSiz = defPtSiz,
-                 ganalytics = ganalytics, markers.all = markers.all, cluster.meta=cluster.meta, markers.top20 = markers.top20, de.genes = de.genes,
+                 ganalytics = ganalytics, markers.all = markers.all, markers.top20 = markers.top20, de.genes = de.genes,
                  gene.ranks = gene.ranks, volc.plot = volc.plot, gene.ont = gene.ont)
 
 }
