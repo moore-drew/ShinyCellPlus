@@ -538,11 +538,21 @@ makeShinyFiles <- function(
 
     if(de.genes==TRUE) { 
       #sc1conf$extra_tabs[3] = TRUE
-      # TODO: figure out how to deal with multiple libra tables, similar to how
-      # it is dealt with in the lower volc.plot conditional
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         cat("creating .rds for differentially expressed genes...\n\n")
         de_genes <- obj@misc$DE_genes$libra$overall
+        #sc1conf$extra_tabs[3] = TRUE
+        de_genes$de_family <- NULL
+        de_genes$de_method <- NULL
+        de_genes$de_type <- NULL
+        de_genes$de_name <- as.factor(de_genes$de_name)
+        sc1conf$DEs[1] <- paste0(levels(de_genes$de_name), collapse="|")
+        saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes.rds"))
+        sc1conf$extra_tabs[3] <- TRUE
+      }
+      else if(!is.null(obj@misc$DE_genes$seurat$overall)) {
+        cat("creating .rds for differentially expressed genes...\n\n")
+        de_genes <- obj@misc$DE_genes$seurat$overall
         #sc1conf$extra_tabs[3] = TRUE
         de_genes$de_family <- NULL
         de_genes$de_method <- NULL
@@ -578,6 +588,7 @@ makeShinyFiles <- function(
 
     if(volc.plot==TRUE) {
       #sc1conf$extra_tabs[5] = TRUE
+      #TODO: tighten these two conditionals up, there's only one line of difference
       if(!is.null(obj@misc$DE_genes$libra$overall)) {
         cat("creating .rds of differentially expressed genes formatted for ggvolc...\n\n")
         # check to see if has correct column names?
@@ -586,6 +597,20 @@ makeShinyFiles <- function(
         de_genes <- obj@misc$DE_genes$libra$overall
         de_genes <- dplyr::rename(de_genes, genes = gene) 
         de_genes <- dplyr::rename(de_genes, log2FoldChange = avg_logFC) 
+        de_genes <- dplyr::rename(de_genes, pvalue = p_val_adj)
+        de_genes$de_name <- as.factor(de_genes$de_name)
+        sc1conf$DEs[2] <- paste0(levels(de_genes$de_name), collapse="|")
+        columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
+        uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
+        sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
+        saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
+        sc1conf$extra_tabs[5] <- TRUE
+      }
+      else if(!is.null(obj@misc$DE_genes$seurat$overall)) {
+        cat("creating .rds of differentially expressed genes formatted for ggvolc...\n\n")
+        de_genes <- obj@misc$DE_genes$seurat$overall
+        de_genes <- dplyr::rename(de_genes, genes = gene)
+        de_genes <- dplyr::rename(de_genes, log2FoldChange = avg_log2FC)
         de_genes <- dplyr::rename(de_genes, pvalue = p_val_adj)
         de_genes$de_name <- as.factor(de_genes$de_name)
         sc1conf$DEs[2] <- paste0(levels(de_genes$de_name), collapse="|")
