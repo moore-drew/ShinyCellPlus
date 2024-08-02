@@ -1802,7 +1802,7 @@ wrSVdeGenes <- function(prefix, de.genes) {
             '     }} \n',
             '   }}) \n',
             '   \n',
-            ' \n',
+            ' \n'
     )
   }
   else {
@@ -3811,7 +3811,7 @@ wrUIgeneOnt <- function(prefix, gene.ont) {
        '        uiOutput("gont_plot.ui") \n',
        '      ) \n',
        '    ) \n',
-       '  ) \n',
+       '  ) \n'
     )
   }
 
