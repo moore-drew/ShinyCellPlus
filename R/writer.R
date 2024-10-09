@@ -1821,8 +1821,8 @@ wrSVdeGenes <- function(prefix, de.genes) {
 wrSVgeneSig <- function(prefix, gene.ranks) {
   #graphs <- ''
   if(gene.ranks == TRUE) {
-  #  graphs<-graphs + glue::glue( 
-  glue::glue(
+    #  graphs<-graphs + glue::glue( 
+    glue::glue(
             ' \n',
             ' # gene sig \n',
             ' output$gsig_subset.ui <- renderUI({{ \n',
@@ -3811,7 +3811,7 @@ wrUIgeneOnt <- function(prefix, gene.ont) {
        '        uiOutput("gont_plot.ui") \n',
        '      ) \n',
        '    ) \n',
-       '  ) \n'
+       '  ) \n',
     )
   }
 
