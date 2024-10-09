@@ -33,7 +33,7 @@
 #'
 #' @return server.R and ui.R required for shiny app
 #'
-#' @author John F. Ouyang
+#' @author John F. Ouyang, Drew Moore
 #'
 #' @import data.table readr glue
 #'

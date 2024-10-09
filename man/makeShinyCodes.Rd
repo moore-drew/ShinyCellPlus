@@ -84,5 +84,5 @@ makeShinyCodes(shiny.title = "scRNA-seq shiny app", shiny.footnotes = "",
 
 }
 \author{
-John F. Ouyang
+John F. Ouyang, Drew Moore
 }

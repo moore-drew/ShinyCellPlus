@@ -138,5 +138,5 @@ makeShinyApp(seu, scConf,
 
 }
 \author{
-John F. Ouyang
+John F. Ouyang, Drew Moore
 }

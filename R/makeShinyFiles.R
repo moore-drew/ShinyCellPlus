@@ -61,7 +61,7 @@
 #' @param num.genes max number of most expressed genes to include in ToppGene query
 #' @return data files required for shiny app
 #'
-#' @author John F. Ouyang
+#' @author John F. Ouyang, Drew Moore
 #'
 #' @import data.table hdf5r reticulate hdf5r scToppR
 #' @importFrom dplyr rename

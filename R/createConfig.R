@@ -27,7 +27,7 @@
 #'
 #' @return shinycell config data.table
 #'
-#' @author John F. Ouyang
+#' @author John F. Ouyang, Drew Moore
 #'
 #' @import data.table reticulate hdf5r
 #'
@@ -86,7 +86,7 @@ createConfig <- function(obj, meta.to.include = NA, legendCols = 4,
     stop("Only Seurat/SCE objects or h5ad/loom file paths are accepted!")
   }
   if(!drExist){
-    stop(paste0("ShinyCell did not detect any dimension reduction data \n", 
+    stop(paste0("ShinyCellPlus did not detect any dimension reduction data \n", 
                 "       e.g. umap / tsne. Has any analysis been performed?"))
   }
   
@@ -139,7 +139,7 @@ createConfig <- function(obj, meta.to.include = NA, legendCols = 4,
   
   # STOP if there is no single multi-level covariate
   if(nrow(scConf[grp == TRUE]) == 0){
-    stop(paste0("ShinyCell did not detect any multi-group cell metadata \n", 
+    stop(paste0("ShinyCellPlus did not detect any multi-group cell metadata \n", 
                 "       e.g. library / cluster. Has any analysis been performed?"))
   }
   
