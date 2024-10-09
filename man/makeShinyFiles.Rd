@@ -121,5 +121,5 @@ makeShinyFiles(seu, scConf, gex.assay = "RNA", gex.slot = "data",
 
 }
 \author{
-John F. Ouyang
+John F. Ouyang, Drew Moore
 }

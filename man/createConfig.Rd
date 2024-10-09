@@ -44,5 +44,5 @@ scConf = createConfig(obj)
 
 }
 \author{
-John F. Ouyang
+John F. Ouyang, Drew Moore
 }
