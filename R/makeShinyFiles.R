@@ -89,9 +89,9 @@ makeShinyFiles <- function(
     # but the slot parameter would still need to be conditionally chosen in some way
     # to either "data" or "counts"
     if(obj@version >= "5.0.0") {
-      gex.matdim = dim(LayerData(obj, assay=gex.assay[1], layer=gex.slot[3]))
-      gex.rownm = rownames(LayerData(obj, assay=gex.assay[1], layer=gex.slot[3]))
-      gex.colnm = colnames(LayerData(obj, assay=gex.assay[1], layer=gex.slot[3]))
+      gex.matdim = dim(LayerData(obj, assay=gex.assay[1], layer=gex.slot[1]))
+      gex.rownm = rownames(LayerData(obj, assay=gex.assay[1], layer=gex.slot[1]))
+      gex.colnm = colnames(LayerData(obj, assay=gex.assay[1], layer=gex.slot[1]))
     }
     else {
       gex.matdim = dim(slot(obj@assays[[gex.assay[1]]], gex.slot[1]))
