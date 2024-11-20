@@ -337,10 +337,10 @@ makeShinyFiles <- function(
     if(obj@version >= "5.0.0") {
       for(i in 1:floor((gex.matdim[1]-8)/chk)){
         sc1gexpr.grp.data[((i-1)*chk+1):(i*chk), ] <- as.matrix(
-          LayerData(obj, assay=gex.assay[1], layer=gex.slot[3])[((i-1)*chk+1):(i*chk),])
+          LayerData(obj, assay=gex.assay[1], layer=gex.slot[1])[((i-1)*chk+1):(i*chk),])
       }
       sc1gexpr.grp.data[(i*chk+1):gex.matdim[1], ] <- as.matrix(
-        LayerData(obj, assay=gex.assay[1], layer=gex.slot[3])[(i*chk+1):gex.matdim[1],])
+        LayerData(obj, assay=gex.assay[1], layer=gex.slot[1])[(i*chk+1):gex.matdim[1],])
     }
     else {
       for(i in 1:floor((gex.matdim[1]-8)/chk)){
