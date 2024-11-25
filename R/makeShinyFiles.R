@@ -602,6 +602,12 @@ makeShinyFiles <- function(
         sc1conf$DEs[2] <- paste0(levels(de_genes$de_name), collapse="|")
         columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
         uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
+        for(uniq in uniq_cols) {
+          if(length(unique(de_genes[[uniq]])) > 75) {
+            uniq_cols <- subset(uniq_cols, uniq_cols != uniq)
+            cat(paste0("removing ", uniq, " from available ggvolc data set to subset from, >75 discrete values...\n\n"))
+          }
+        }
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
         sc1conf$extra_tabs[5] <- TRUE
@@ -616,6 +622,12 @@ makeShinyFiles <- function(
         sc1conf$DEs[2] <- paste0(levels(de_genes$de_name), collapse="|")
         columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
         uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
+        for(uniq in uniq_cols) {
+          if(length(unique(de_genes[[uniq]])) > 75) {
+            uniq_cols <- subset(uniq_cols, uniq_cols != uniq)
+            cat(paste0("removing ", uniq, " from available ggvolc data set to subset from, >75 discrete values...\n\n"))
+          }
+        }
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
         saveRDS(de_genes, file=paste0(shiny.dir, "/", shiny.prefix, "de_genes_ggvolc.rds"))
         sc1conf$extra_tabs[5] <- TRUE

@@ -2037,6 +2037,7 @@ wrSVvolc <- function(prefix, volc.plot) {
             '    \n', 
             '    if(subset_toggle == 0) {{ \n',
             '      orig_subset <- strsplit(conf$DEs[3], "\\\\|")[[1]][1] \n',
+            '      #orig_subset <- de_subset_col \n',
             '      de_subset <- unique(genes[[orig_subset]]) \n',
             '    }} \n',
             '    \n', 
