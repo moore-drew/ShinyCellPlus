@@ -605,7 +605,7 @@ makeShinyFiles <- function(
         for(uniq in uniq_cols) {
           if(length(unique(de_genes[[uniq]])) > volc.plot.max.unique) {
             uniq_cols <- subset(uniq_cols, uniq_cols != uniq)
-            cat(paste0(uniq, " has greater than input var volc.plot.max.unique values (", volc.plot.max.unique, "), removing from available ggvolc data...\n\n"))
+            cat(paste0(uniq, " has greater than input var volc.plot.max.unique values (", volc.plot.max.unique, " < ", length(unique(de_genes[[uniq]])),"), removing from available ggvolc data...\n\n"))
           }
         }
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
@@ -625,7 +625,7 @@ makeShinyFiles <- function(
         for(uniq in uniq_cols) {
           if(length(unique(de_genes[[uniq]])) > volc.plot.max.unique) {
             uniq_cols <- subset(uniq_cols, uniq_cols != uniq)
-            cat(paste0(uniq, " has greater than input var volc.plot.max.unique values (", volc.plot.max.unique, "), removing from available ggvolc data...\n\n"))
+            cat(paste0(uniq, " has greater than input var volc.plot.max.unique values (", volc.plot.max.unique, " < ", length(unique(de_genes[[uniq]])), "), removing from available ggvolc data...\n\n"))
           }
         }
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
