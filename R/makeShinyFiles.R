@@ -79,7 +79,7 @@ makeShinyFiles <- function(
   obj, scConf, gex.assay = NA, gex.slot = c("data", "scale.data", "counts"), 
   gene.mapping = FALSE, shiny.prefix = "sc1", shiny.dir = "shinyApp/",
   default.gene1 = NA, default.gene2 = NA, default.multigene = NA, 
-  default.dimred = NA, chunk.size = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, gene.ont=FALSE, pval.cutoff=0.5, num.genes=400){
+  default.dimred = NA, chunk.size = 500, markers.all=FALSE, markers.top20=FALSE, de.genes=FALSE, gene.ranks=FALSE, volc.plot=FALSE, volc.plot.max.unique=50, gene.ont=FALSE, pval.cutoff=0.5, num.genes=400){
   ### Preprocessing and checks
   # Generate defaults for gex.assay / gex.slot
   if(class(obj)[1] == "Seurat"){
@@ -603,9 +603,9 @@ makeShinyFiles <- function(
         columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
         uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
         for(uniq in uniq_cols) {
-          if(length(unique(de_genes[[uniq]])) > 75) {
+          if(length(unique(de_genes[[uniq]])) > volc.plot.max.unique) {
             uniq_cols <- subset(uniq_cols, uniq_cols != uniq)
-            cat(paste0("removing ", uniq, " from available ggvolc data set to subset from, >75 discrete values...\n\n"))
+            cat(paste0(uniq, " has greater than input var volc.plot.max.unique values (", volc.plot.max.unique, "), removing from available ggvolc data...\n\n"))
           }
         }
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
@@ -623,9 +623,9 @@ makeShinyFiles <- function(
         columns <- c("genes", "log2FoldChange", "p_val", "pvalue", "de_family", "de_method", "de_type", "de_name")
         uniq_cols <- names(de_genes)[ !(names(de_genes) %in% columns) ]
         for(uniq in uniq_cols) {
-          if(length(unique(de_genes[[uniq]])) > 75) {
+          if(length(unique(de_genes[[uniq]])) > volc.plot.max.unique) {
             uniq_cols <- subset(uniq_cols, uniq_cols != uniq)
-            cat(paste0("removing ", uniq, " from available ggvolc data set to subset from, >75 discrete values...\n\n"))
+            cat(paste0(uniq, " has greater than input var volc.plot.max.unique values (", volc.plot.max.unique, "), removing from available ggvolc data...\n\n"))
           }
         }
         sc1conf$DEs[3] <- paste0(uniq_cols, collapse="|")
