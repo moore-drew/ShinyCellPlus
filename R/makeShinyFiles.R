@@ -54,6 +54,9 @@
 #'   tab and prepare the associated Seurat data
 #' @param volc.plot boolean flag as to whether to create the 
 #'   "Diff. Gene Exp., Volcano" tab and prepare associated Seurat data
+#' @param volc.plot.max.unique for other data columns existing within the volcano plot dataset, the maximum
+#'   number of unique values allowed for use within the app (this is to avoid crashing the app by having too
+#'   many checkbox objects load when subsetting the column)
 #' @param gene.ont boolean flag as to whether to create the "ToppGene Ontology"
 #'   tab and prepate the associated Seurat data
 #' @param pval.cutoff upper limit of pval to filter cluster gene expression by (pvals
