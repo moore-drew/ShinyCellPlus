@@ -25,6 +25,7 @@ makeShinyApp(
   de.genes = FALSE,
   gene.ranks = FALSE,
   volc.plot = FALSE,
+  volc.plot.max.unique = 50,
   gene.ont = FALSE,
   pval.cutoff = 0.5,
   num.genes = 400
@@ -101,6 +102,10 @@ tab and prepare the associated Seurat data}
 
 \item{volc.plot}{boolean flag as to whether to create the 
 "Diff. Gene Exp., Volcano" tab and prepare associated Seurat data}
+
+\item{volc.plot.max.unique}{for other data columns existing within the volcano plot dataset, the maximum
+number of unique values allowed for use within the app (this is to avoid crashing the app by having too
+many checkbox objects load when subsetting the column)}
 
 \item{gene.ont}{boolean flag as to whether to create the "ToppGene Ontology"
 tab and prepate the associated Seurat data}
