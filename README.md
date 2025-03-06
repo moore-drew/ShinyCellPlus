@@ -56,7 +56,7 @@ The associated commands can be ran after standard processing and the removal of 
 # UPDATE THESE TO YOUR PERSONAL DATA DIRECTORIES, FILES, AND SELECTED RESOLUTION (EX: "integrated_snn_res.0.6")
 opt = list(seurat_file_path = "~/example/file/path/seurat.rds",
            seurat_save_name = "example_output_seurat.rds",
-	   seurat_output_path = "~/exmaple/file/output_path/",
+	   seurat_output_path = "~/example/file/output_path/",
 	   resolution = "integrated_snn_res.0.6")
 
 ##############################
@@ -239,7 +239,7 @@ makeShinyApp(seurat, scConf, gene.mapping = TRUE, shiny.title = opt$app_name,
              gene.ranks=TRUE, volc.plot=TRUE, gene.ont=TRUE)
 ```
 
-The Shiny App should run upon completion of this script.  Within the `makeShinyApp()` function call, you will see a series of arguments that allow for the custom addition of optional tabs that we have added; these include:
+The Shiny App should run upon completion of this script; simply open either the server.R or ui.R files within RStudio and click the "Run App" button above either of the files' edit window.  Within the `makeShinyApp()` function call, you will see a series of arguments that allow for the custom addition of optional tabs that we have added; these include:
 
  * `markers.all`: adds "Cluster Markers, All" tab; displays associations between genetic markers and Seurat data clusters.  Requires Presto data.
  * `markers.top20`: adds "Cluster Markers, Top 20" tab; displays associations between the top 20 genetic markers in all Seurat data clusters.  Requires Presto data.
