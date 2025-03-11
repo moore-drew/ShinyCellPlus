@@ -473,6 +473,15 @@ makeShinyFiles <- function(
   saveRDS(sc1gene, file = paste0(shiny.dir, "/", shiny.prefix, "gene.rds"))
   saveRDS(sc1def,  file = paste0(shiny.dir, "/", shiny.prefix, "def.rds"))
 
+  # hot fix for if the number of rows in sc1conf is potentially lower than the number of 
+  # extra tabs
+  num_of_potential_extra_tabs = 6 # increase with new tabs
+  if(nrow(sc1conf) < num_of_potential_extra_tabs) {
+    for(new_row in (nrow(sc1conf):num_of_potential_extra_tabs)[-1]) {
+      sc1conf <- rbindlist(list(sc1conf, list(NA)), fill=TRUE)
+    }
+  }
+
   sc1conf$extra_tabs <- FALSE
   sc1conf$DEs <- FALSE
   sc1conf$gene_ranks <- FALSE
