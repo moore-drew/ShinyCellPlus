@@ -284,3 +284,7 @@ options(rsconnect.max.bundle.size=5368709000)
 ```
 
 Which should adjust a global RStudio option to a few kilobytes below the maximum allowed shinyapps.io upload size (5 GiB).  At least a 'Basic' subscription plan is required for this adjustment.
+
+## Cite this
+
+If you use anything in this repository please cite the following publication:  https://f1000research.com/articles/14-338
