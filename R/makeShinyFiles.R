@@ -741,6 +741,11 @@ makeShinyFiles <- function(
       }
     }
   }
+  else {
+    if(any(markers.all, markers.top20, de.genes, gene.ranks, volc.plot, gene.ont)) {
+      cat("Extra tabs require a Seurat object with associated tab data stored in the 'misc' section of the Seurat object.\n\n")
+    }
+  }
 
   saveRDS(sc1conf, file = paste0(shiny.dir, "/", shiny.prefix, "conf.rds"))
   return(sc1conf)
