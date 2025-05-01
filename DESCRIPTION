@@ -1,7 +1,7 @@
 Package: ShinyCellPlus
 Type: Package
 Title: Updated Shiny Web Apps for Single-Cell and Multiomic Data
-Version: 1.1.2
+Version: 1.1.5
 Author: Drew Moore
 Maintainer: Drew Moore <mooredr@musc.edu>
 Description: Shiny apps for interactive exploration of single-cell data. Based on the ShinyCell Project by John F. Ouyang <https://github.com/SGDDNB/ShinyCell>
