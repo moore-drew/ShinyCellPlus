@@ -7,7 +7,7 @@ Maintainer: Drew Moore <mooredr@musc.edu>
 Description: Shiny apps for interactive exploration of single-cell data. Based on the ShinyCell Project by John F. Ouyang <https://github.com/SGDDNB/ShinyCell>
 License: GPL-3
 Suggests:
-    SingleCellExperiment (>= 1.4.1)
+    SingleCellExperiment (>= 1.4.1),
     Seurat       (>= 5.0.0),
     SeuratObject (>= 5.0.0)
 Depends:
