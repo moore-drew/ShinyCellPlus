@@ -8,10 +8,10 @@ Description: Shiny apps for interactive exploration of single-cell data. Based o
 License: GPL-3
 Suggests:
     SingleCellExperiment (>= 1.4.1)
+    Seurat       (>= 5.0.0),
+    SeuratObject (>= 5.0.0)
 Depends:
     reticulate   (>= 1.13),
-    Seurat       (>= 5.0.0),
-    SeuratObject (>= 5.0.0),
     data.table   (>= 1.12.2),
     Matrix       (>= 1.2-17),
     hdf5r        (>= 1.2.0),
