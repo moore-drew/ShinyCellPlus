@@ -3743,7 +3743,7 @@ wrUIvolc <- function(prefix, volc.plot) {
       '        conditionalPanel("input.volc_subset_toggle % 2 == 1", \n',
       '                         #selectInput("volc_subset", "Cell information to subset:", choices={prefix}conf[grp==TRUE]$UI, selected={prefix}def$grp1), \n',
       '                         #selectInput("volc_subset", "Cell information to subset:", choices={prefix}conf$DEs[3]), \n',
-      '                         selectInput("volc_subset", "Cell information to subset:", choices=strsplit(sc1conf$DEs[3], "\\\\|")[[1]]), \n',
+      '                         selectInput("volc_subset", "Cell information to subset:", choices=strsplit({prefix}conf$DEs[3], "\\\\|")[[1]]), \n',
       '                         uiOutput("volc_subset.ui"), \n',
       '                         actionButton("volc_subset_sel_all", "Select all groups"), \n',
       '                         actionButton("volc_subset_desel_all", "Deselect all groups") \n',
