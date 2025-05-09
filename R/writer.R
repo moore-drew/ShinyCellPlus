@@ -3721,7 +3721,7 @@ wrUIgeneSig <- function(prefix, gene.ranks) {
 #' Append gene differential gene expression volcano plot page to ui.R
 #'
 #' @param prefix file prefix
-#' @param gene.ranks TRUE/FALSE whether to include this tab
+#' @param volc.plot TRUE/FALSE whether to include this tab
 #' @rdname wrUIvolc
 #' @export wrUIvolc
 #'
