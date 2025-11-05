@@ -37,7 +37,6 @@ Imports:
     httpcode,
     magrittr,
     patchwork,
-    rbokeh,
     ggvolc,
     scToppR,
     stringr,
