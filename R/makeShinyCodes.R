@@ -65,7 +65,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
       c("shiny","shinyhelper","data.table","Matrix","DT","magrittr","ggplot2",
-        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell","rbokeh", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')", "scToppR", "patchwork", "stringr, include.only = c('str_sub')")), file = fname)
+        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')", "scToppR", "patchwork", "stringr, include.only = c('str_sub')")), file = fname)
     readr::write_file(wrSVload(shiny.prefix), append = TRUE, file = fname)
     readr::write_file(wrSVfix(), append = TRUE, file = fname)
     readr::write_file(wrSVmain(shiny.prefix, subst), append = TRUE, file = fname)
@@ -106,7 +106,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
       c("shiny","shinyhelper","data.table","Matrix","DT","magrittr","ggplot2",
-        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell","rbokeh", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')", "scToppR", "patchwork", "stringr, include.only = c('str_sub')")), path = fname)
+        "ggrepel","hdf5r","ggdendro","gridExtra","AUCell", "GSEABase, include.only = 'GeneSet'", "ggvolc", "dplyr, include.only = c('rename', 'filter')", "scToppR", "patchwork", "stringr, include.only = c('str_sub')")), path = fname)
     readr::write_file(wrSVload(shiny.prefix), append = TRUE, path = fname)
     readr::write_file(wrSVfix(), append = TRUE, path = fname)
     readr::write_file(wrSVmain(shiny.prefix, subst), append = TRUE, path = fname)
