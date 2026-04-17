@@ -42,6 +42,8 @@ Imports:
     stringr,
     triebeard,
     urltools
+Remotes:
+    BioformaticsMUSC/scToppR
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.3.2
