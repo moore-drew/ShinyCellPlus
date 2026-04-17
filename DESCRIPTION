@@ -43,7 +43,7 @@ Imports:
     triebeard,
     urltools
 Remotes:
-    BioformaticsMUSC/scToppR
+    BioinformaticsMUSC/scToppR
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.3.2
