@@ -44,6 +44,7 @@ Imports:
     urltools
 Remotes:
     BioinformaticsMUSC/scToppR
+    Estatcamp/rbokeh
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.3.2
