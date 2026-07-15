@@ -43,7 +43,7 @@ Imports:
     triebeard,
     urltools
 Remotes:
-    BioinformaticsMUSC/scToppR
+    BioinformaticsMUSC/scToppR,
     Estatcamp/rbokeh
 Encoding: UTF-8
 LazyData: TRUE
